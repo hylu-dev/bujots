@@ -4,7 +4,7 @@ import JournalCover from './components/JournalCover'
 
 function App() {
   return (
-    <div className='vw-100 vw-100 flex justify-center'>
+    <div className='h-screen w-screen grid place-content-center'>
       <JournalCover></JournalCover>
     </div>
   );
