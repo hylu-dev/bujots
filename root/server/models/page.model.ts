@@ -1,21 +1,65 @@
-import mongoose, { Schema, Document} from 'mongoose'
+import mongoose, { Schema, Document } from 'mongoose'
+
+export interface IJot extends Document {
+    text: String
+}
+
+export interface IImage extends Document {
+    name: String,
+    position: [Number, Number],
+    image: {
+        data: Buffer,
+        contentType: String
+    }
+}
 
 export interface IPage extends Document {
     title: String,
     date: Date,
     body: String,
-    owner: String
+    author: Schema.Types.ObjectId,
+    jots: [IJot],
+    images: [IImage]
 }
 
-const pageSchema = new Schema({
+const jotSchema = new Schema({
+    text: String
+}, { timestamps: true })
+
+const imageSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, "Cannot be blank"]
+    },
+    position: {
+        type: [Number, Number],
+        required: [true, "Cannot be blank"]
+    },
+    image: {
+        type: {
+            data: Buffer,
+            contentType: String
+        },
+        required: [true, "Cannot be blank"]
+    }
+}, { timestamps: true })
+
+const pageSchema = new Schema<IPage>({
     title: {
         type: String,
         required: [true, "Cannot be blank"]
     },
     date: Date,
-    body: String
-  }, {timestamps: true});
-  
-  const Page = mongoose.model<IPage>('Page', pageSchema);
+    body: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        required: [true, "Cannot be blank"]
+    },
+    jots: [jotSchema],
+    images: [imageSchema]
 
-  module.exports = Page;
+}, { timestamps: true });
+
+const Page = mongoose.model<IPage>('Page', pageSchema);
+
+module.exports = Page;

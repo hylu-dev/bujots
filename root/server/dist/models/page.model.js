@@ -24,13 +24,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const jotSchema = new mongoose_1.Schema({
+    text: String
+}, { timestamps: true });
+const imageSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: [true, "Cannot be blank"]
+    },
+    position: {
+        type: [Number, Number],
+        required: [true, "Cannot be blank"]
+    },
+    image: {
+        type: {
+            data: Buffer,
+            contentType: String
+        },
+        required: [true, "Cannot be blank"]
+    }
+}, { timestamps: true });
 const pageSchema = new mongoose_1.Schema({
     title: {
         type: String,
         required: [true, "Cannot be blank"]
     },
     date: Date,
-    body: String
+    body: String,
+    author: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: [true, "Cannot be blank"]
+    },
+    jots: [jotSchema],
+    images: [imageSchema]
 }, { timestamps: true });
 const Page = mongoose_1.default.model('Page', pageSchema);
 module.exports = Page;
