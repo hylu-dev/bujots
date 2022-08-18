@@ -1,4 +1,4 @@
-import React, { Component, MouseEvent } from 'react'
+import React, { MouseEvent } from 'react'
 
 type Props = {
     styles?: String,
@@ -6,18 +6,17 @@ type Props = {
     value?: String
 };
 
-export default class Button extends Component<Props> {
-    render() {
-        const styles = this.props.styles ? this.props.styles : "";
-        const handler = this.props.handler;
-        const value = this.props.value;
-        return (
-            <button
-                className={`${styles}`}
-                onClick={handler}
-            >
-                {value}
-            </button>
-        )
-    }
+const Button = ({styles, handler, value}: Props) => {
+    const styleClasses = styles ? styles : "";
+
+    return <>
+        <button
+            className={`${styles}`}
+            onClick={handler}
+        >
+            {value}
+        </button>
+    </>
 }
+
+export default Button
