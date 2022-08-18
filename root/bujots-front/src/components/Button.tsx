@@ -11,7 +11,7 @@ const Button = ({styles, handler, value}: Props) => {
 
     return <>
         <button
-            className={`${styles}`}
+            className={`${styleClasses}`}
             onClick={handler}
         >
             {value}
