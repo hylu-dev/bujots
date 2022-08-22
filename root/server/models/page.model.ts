@@ -1,32 +1,35 @@
-import mongoose, { Schema, Document } from 'mongoose'
+import mongoose, { Schema, Document, Types } from 'mongoose'
 
 export interface IJot extends Document {
-    text: String
+    text: string
 }
 
 export interface IImage extends Document {
-    name: String,
-    position: [Number, Number],
+    name: string,
+    position: [number, number],
     image: {
         data: Buffer,
-        contentType: String
+        contentType: string
     }
 }
 
 export interface IPage extends Document {
-    title: String,
+    title: string,
     date: Date,
-    body: String,
+    body: string,
     author: Schema.Types.ObjectId,
-    jots: [IJot],
-    images: [IImage]
+    jots: Types.DocumentArray<IJot>,
+    images: Types.DocumentArray<IImage>
 }
 
-const jotSchema = new Schema({
-    text: String
+export const jotSchema = new Schema<IJot>({
+    text: {
+        type: String,
+        default: ""
+    }
 }, { timestamps: true })
 
-const imageSchema = new Schema({
+export const imageSchema = new Schema<IImage>({
     name: {
         type: String,
         required: [true, "Cannot be blank"]
@@ -44,12 +47,15 @@ const imageSchema = new Schema({
     }
 }, { timestamps: true })
 
-const pageSchema = new Schema<IPage>({
+export const pageSchema = new Schema<IPage>({
     title: {
         type: String,
         required: [true, "Cannot be blank"]
     },
-    date: Date,
+    date: {
+        type: Date,
+        default: Date.now()
+    },
     body: String,
     author: {
         type: Schema.Types.ObjectId,

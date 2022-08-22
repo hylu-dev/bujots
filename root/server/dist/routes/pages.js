@@ -35,9 +35,9 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
     newUser.save()
         .then(((result) => res.json(result)))
         .catch((err) => res.status(400).json({ error: err }));
-})).patch('/update/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+})).patch('/update/:postID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const page = req.body;
-    const target = req.params.id;
+    const target = req.params.postID;
     if (!mongoose_1.Types.ObjectId.isValid(target))
         return res.status(400).json({ error: 'Invalid ID format' });
     if (!(yield Page.findById(target))) {
@@ -49,8 +49,8 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         const id = req.user ? req.user._id : null;
         return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
     }).catch((err) => res.status(400).json({ error: 'err' }));
-})).get('/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const target = req.params.id;
+})).get('/:postID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const target = req.params.postID;
     if (!mongoose_1.Types.ObjectId.isValid(target))
         return res.status(400).json({ error: 'Invalid ID format' });
     Page.findById(target)
@@ -61,8 +61,8 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
     })
         .catch((err) => res.status(400).json({ error: err }));
-})).delete('/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const target = req.params.id;
+})).delete('/:postID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const target = req.params.postID;
     if (!mongoose_1.Types.ObjectId.isValid(target))
         return res.status(400).json({ error: 'Invalid ID format' });
     Page.findByIdAndDelete(target)

@@ -32,9 +32,9 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     newUser.save()
         .then(((result: IPage) => res.json(result)))
         .catch((err: Error) => res.status(400).json({ error: err }))
-}).patch('/update/:id', verifyToken, async (req: Request, res: Response) => {
+}).patch('/update/:postID', verifyToken, async (req: Request, res: Response) => {
     const page = req.body;
-    const target = req.params.id
+    const target = req.params.postID;
     if (!Types.ObjectId.isValid(target)) return res.status(400).json({ error: 'Invalid ID format' });
 
     if (!(await Page.findById(target))) {
@@ -47,8 +47,8 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
             return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
         }
     ).catch((err: Error) => res.status(400).json({ error: 'err' }))
-}).get('/:id', verifyToken, async (req: Request, res: Response) => {
-    const target = req.params.id;
+}).get('/:postID', verifyToken, async (req: Request, res: Response) => {
+    const target = req.params.postID;
     if (!Types.ObjectId.isValid(target)) return res.status(400).json({ error: 'Invalid ID format' });
 
     Page.findById(target)
@@ -58,8 +58,8 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
             return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
         })
         .catch((err: Error) => res.status(400).json({ error: err }))
-}).delete('/:id', verifyToken, async (req: Request, res: Response) => {
-    const target = req.params.id
+}).delete('/:postID', verifyToken, async (req: Request, res: Response) => {
+    const target = req.params.postID;
     if (!Types.ObjectId.isValid(target)) return res.status(400).json({ error: 'Invalid ID format' })
 
     Page.findByIdAndDelete(target)
