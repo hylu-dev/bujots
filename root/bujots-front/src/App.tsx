@@ -1,15 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from './pages/Login'
+import { useState } from 'react';
+import { BrowserRouter } from "react-router-dom";
+import AnimatedRoute from './components/AnimatedRoutes';
+import PostContext, { IPage, emptyPage } from './contexts/PageContext';
 
 function App() {
+  const [page, setPage] = useState<IPage>(emptyPage);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-      </Routes>
-    </BrowserRouter>
+    <PostContext.Provider value={{ page, setPage }}>
+      <BrowserRouter>
+        <AnimatedRoute></AnimatedRoute>
+      </BrowserRouter>
+    </PostContext.Provider>
   );
 }
 

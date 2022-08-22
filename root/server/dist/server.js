@@ -16,9 +16,9 @@ const connection = mongoose.connection;
 connection.once('open', () => {
     console.log("MongoDB connection established");
 });
-app.use('/users', require('./routes/users'));
-app.use('/pages', require('./routes/pages'));
-app.use('/', require('./routes/auth'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/pages', require('./routes/pages'));
+app.use('/api/auth', require('./routes/auth'));
 app.listen(port, () => {
     console.log(`Server is running on port : ${port}`);
 });

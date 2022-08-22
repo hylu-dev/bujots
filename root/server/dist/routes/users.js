@@ -17,18 +17,12 @@ const authentication_1 = require("../utils/authentication");
 router.get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield User.find()
         .then((users) => res.json(users))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
-})).get('/getCurrentUser', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.user ? req.user : null;
-    if (yield User.findById(id)) {
-        return res.json(Object.assign({ isLoggedIn: true }, req.user));
-    }
-    return res.status(400).json(`Error: User does not exist`);
+        .catch((err) => res.status(400).json({ error: err }));
 })).post('/add', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
     //check if user exists
     if (yield User.findOne({ username: user.username })) {
-        return res.status(400).json(`Error: Username is already in use`);
+        return res.status(400).json({ error: 'Username is already in use' });
     }
     const newUser = new User({
         username: user.username.toLowerCase(),
@@ -36,41 +30,41 @@ router.get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     });
     newUser.save()
         .then(((result) => res.json(result)))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: 'err' }));
 })).patch('/update/:username', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = req.body;
     const target = req.params.username;
     if (!(yield User.findOne({ username: target }))) {
-        return res.status(400).json(`Error: User does not exist`);
+        return res.status(400).json({ error: 'User does not exist' });
     }
     yield User.findOneAndUpdate({ username: target }, user, { new: true }).then((result) => {
         console.log(result);
         return res.json(result);
-    }).catch((err) => res.status(400).json(`Error: ${err}`));
+    }).catch((err) => res.status(400).json({ error: err }));
 })).get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.id;
     if (!mongoose_1.Types.ObjectId.isValid(target))
-        return res.status(400).json(`Error: Invalid ID format`);
+        return res.status(400).json({ error: 'Invalid ID format' });
     User.findById(target)
         .then((users) => {
-        users ? res.json(users) : res.status(400).json(`Error: User does not exist`);
+        users ? res.json(users) : res.status(400).json({ error: 'User does not exist' });
     })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 })).get('/getByUsername/:username', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.username;
     User.findOne({ username: target })
         .then((users) => {
-        users ? res.json(users) : res.status(400).json(`Error: User does not exist`);
+        users ? res.json(users) : res.status(400).json({ error: 'User does not exist' });
     })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 })).delete('/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.id;
     if (!mongoose_1.Types.ObjectId.isValid(target))
-        return res.status(400).json(`Error: Invalid ID format`);
+        return res.status(400).json({ error: 'Invalid ID format' });
     User.findByIdAndDelete(target)
         .then((users) => {
-        users.deletedCount ? res.json(`User ${target} deleted`) : res.status(400).json(`Error: User does not exist`);
+        users.deletedCount ? res.json(`User ${target} deleted`) : res.status(400).json({ error: 'User does not exist' });
     })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 }));
 module.exports = router;

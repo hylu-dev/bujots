@@ -17,60 +17,61 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
     const id = req.user ? req.user._id : null;
     yield Page.find({ author: id }).sort({ "date": -1 }).exec()
         .then((users) => res.json(users))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ Error: err }));
 })).get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     Page.find()
         .then((users) => res.json(users))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ Error: err }));
 })).post('/add', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const page = req.body;
     const author = req.user ? req.user._id : null;
+    const date = page.date || Date.now();
     const newUser = new Page({
         title: page.title,
-        date: page.date,
+        date: date,
         body: page.body,
         author: author
     });
     newUser.save()
         .then(((result) => res.json(result)))
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 })).patch('/update/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const page = req.body;
     const target = req.params.id;
     if (!mongoose_1.Types.ObjectId.isValid(target))
-        return res.status(400).json(`Error: Invalid ID format`);
+        return res.status(400).json({ error: 'Invalid ID format' });
     if (!(yield Page.findById(target))) {
-        return res.status(400).json(`Error: Page does not exist`);
+        return res.status(400).json({ error: 'Page does not exist' });
     }
     yield Page.findOneAndUpdate({ id: target }, page, { new: true }).then((page) => {
         if (!page)
-            return res.status(404).json(`Error: Page does not exist`);
+            return res.status(404).json({ error: 'Page does not exist' });
         const id = req.user ? req.user._id : null;
-        return page.author == id ? res.json(page) : res.status(401).json(`Error: User not authorized`);
-    }).catch((err) => res.status(400).json(`Error: ${err}`));
+        return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
+    }).catch((err) => res.status(400).json({ error: 'err' }));
 })).get('/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.id;
     if (!mongoose_1.Types.ObjectId.isValid(target))
-        return res.status(400).json(`Error: Invalid ID format`);
+        return res.status(400).json({ error: 'Invalid ID format' });
     Page.findById(target)
         .then((page) => {
         if (!page)
-            return res.status(404).json(`Error: Page does not exist`);
+            return res.status(404).json({ error: 'Page does not exist' });
         const id = req.user ? req.user._id : null;
-        return page.author == id ? res.json(page) : res.status(401).json(`Error: User not authorized`);
+        return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
     })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 })).delete('/:id', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.id;
     if (!mongoose_1.Types.ObjectId.isValid(target))
-        return res.status(400).json(`Error: Invalid ID format`);
+        return res.status(400).json({ error: 'Invalid ID format' });
     Page.findByIdAndDelete(target)
         .then((page) => {
         if (!page)
-            return res.status(404).json(`Error: Page does not exist`);
+            return res.status(404).json({ error: 'Page does not exist' });
         const id = req.user ? req.user._id : null;
-        return page.author == id ? res.json(`Page ${target} deleted`) : res.status(401).json(`Error: User not authorized`);
+        return page.author == id ? res.json(`Page ${target} deleted`) : res.status(401).json({ error: 'User not authorized' });
     })
-        .catch((err) => res.status(400).json(`Error: ${err}`));
+        .catch((err) => res.status(400).json({ error: err }));
 }));
 module.exports = router;

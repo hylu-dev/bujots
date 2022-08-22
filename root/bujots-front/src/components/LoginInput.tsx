@@ -1,26 +1,25 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 
 type Props = {
     placeholder?: string
+    type?: string,
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 };
 
-const LoginInput = ({ placeholder, onChange }: Props) => {
+export default function LoginInput({ placeholder, type, onChange }: Props) {
     return <>
         <div className='flex justify-center'>
-            <input type="text" placeholder={placeholder} className='
+            <input type={type || "text"} placeholder={placeholder} className='
             bg-transparent
             border-0
             border-b
             border-black
             opacity-75
             placeholder-gray-800
+            text-center
             '
                 onChange={onChange}
             />
         </div>
     </>
-
 }
-
-export default LoginInput
