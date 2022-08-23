@@ -1,3 +1,22 @@
+export async function patch(url, payload, token = "") {
+    let headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+    if (token) headers['Authorization'] = `Bearer ${token}`
+
+    return await fetch(url, {
+        method: 'PATCH',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: headers,
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(payload)
+    });
+}
+
 export async function post(url, payload, token = "") {
     let headers = {
         'Accept': 'application/json',
