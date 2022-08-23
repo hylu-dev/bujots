@@ -33,6 +33,7 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
         .then(((result: IPage) => res.json(result)))
         .catch((err: Error) => res.status(400).json({ error: err }))
 }).patch('/update/:postID', verifyToken, async (req: Request, res: Response) => {
+    const userID = req.user ? req.user._id : null;
     const page = req.body;
     const target = req.params.postID;
     if (!Types.ObjectId.isValid(target)) return res.status(400).json({ error: 'Invalid ID format' });
@@ -43,8 +44,7 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     await Page.findOneAndUpdate({ id: target }, page, { new: true }).then(
         (page: IPage) => {
             if (!page) return res.status(404).json({ error: 'Page does not exist' });
-            const id = req.user ? req.user._id : null;
-            return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
+            return page.author == userID ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
         }
     ).catch((err: Error) => res.status(400).json({ error: 'err' }))
 }).get('/:postID', verifyToken, async (req: Request, res: Response) => {

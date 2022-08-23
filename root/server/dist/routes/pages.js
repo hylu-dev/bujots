@@ -36,6 +36,7 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         .then(((result) => res.json(result)))
         .catch((err) => res.status(400).json({ error: err }));
 })).patch('/update/:postID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userID = req.user ? req.user._id : null;
     const page = req.body;
     const target = req.params.postID;
     if (!mongoose_1.Types.ObjectId.isValid(target))
@@ -46,8 +47,7 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
     yield Page.findOneAndUpdate({ id: target }, page, { new: true }).then((page) => {
         if (!page)
             return res.status(404).json({ error: 'Page does not exist' });
-        const id = req.user ? req.user._id : null;
-        return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
+        return page.author == userID ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
     }).catch((err) => res.status(400).json({ error: 'err' }));
 })).get('/:postID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const target = req.params.postID;
