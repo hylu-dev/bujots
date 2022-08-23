@@ -83,7 +83,7 @@ router.post('/add/:postID', authentication_1.verifyToken, (req, res) => __awaite
     if (!(yield Page.findById(target))) {
         return res.status(400).json({ error: 'Page does not exist' });
     }
-    yield Page.findOneAndUpdate({ id: target }, { jots: jotArray }, { new: true }).then((page) => {
+    yield Page.findByIdAndUpdate(target, { jots: jotArray }, { new: true }).then((page) => {
         if (!page)
             return res.status(404).json({ error: 'Page does not exist' });
         return page.author == userID ? res.json(page) : res.status(401).json({ error: 'User not authorized' });
