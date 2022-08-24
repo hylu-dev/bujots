@@ -1,11 +1,11 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { get, post } from "../utils"
+import { motion } from 'framer-motion';
 import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
-import { motion } from 'framer-motion';
-import PageContext, { emptyPage, IPage } from '../contexts/PageContext';
 import Timeline from '../components/journal/timeline/Timeline';
+import PageContext, { emptyPage, IPage } from '../contexts/PageContext';
 import AllPagesContext from '../contexts/AllPagesContext';
 
 export default function Journal() {

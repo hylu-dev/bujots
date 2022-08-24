@@ -1,11 +1,14 @@
 import { useContext, useState, useEffect } from "react";
-import PageContext, { IJot, IPage, emptyJot } from '../../contexts/PageContext';
-import Jot from './Jot'
-import { motion } from 'framer-motion'
-import { post, del, patch } from '../../utils'
+import PageContext, { IJot, IPage, emptyJot, emptyPage } from '../../contexts/PageContext';
+import AllPagesContext from '../../contexts/AllPagesContext';
+import Jot from './Jot';
+import { motion } from 'framer-motion';
+import { post, del, patch } from '../../utils';
+
 
 export default function JournalPage() {
     const { page, setPage } = useContext(PageContext);
+    const { allPages, setAllPages } = useContext(AllPagesContext);
     const [jots, setJots] = useState<IJot[]>([]);
     const token = window.localStorage.getItem("access_token") || "";
     const date = new Date(page.date);
@@ -51,8 +54,21 @@ export default function JournalPage() {
     }
 
     const removeJot = async (index: number) => {
-        setJots(jots.splice(index));
+        jots.splice(index);
+        setJots([...jots]);
     }
+
+    const removePage = async () => {
+        await del(`${process.env.REACT_APP_API_URL}/pages/${page._id}`,
+          token)
+          .then(response => {
+            if (response.status === 200) {
+              response.json().then(data => {
+                allPages.length ? setPage(allPages[0]) : setPage(emptyPage);
+              })
+            }
+          })
+      }
 
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
@@ -65,7 +81,7 @@ export default function JournalPage() {
                 <ol className='flex flex-col h-full whitespace-nowrap gap-2'>
                     {
                         jots.map((j, index) => {
-                            return <Jot key={j._id} text={j.text} onChange={e => updateJot(e.target.value, index)}></Jot>
+                            return <Jot key={j._id || index} onDelete={() => removeJot(index)} text={j.text} onChange={e => updateJot(e.target.value, index)}></Jot>
                         })
                     }
                     <motion.li onClick={addJot} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"
