@@ -28,7 +28,8 @@ const mongoose_1 = __importStar(require("mongoose"));
 exports.jotSchema = new mongoose_1.Schema({
     text: {
         type: String,
-        default: ""
+        default: "",
+        maxLength: 100
     }
 }, { timestamps: true });
 exports.imageSchema = new mongoose_1.Schema({
@@ -51,7 +52,8 @@ exports.imageSchema = new mongoose_1.Schema({
 exports.pageSchema = new mongoose_1.Schema({
     title: {
         type: String,
-        required: [true, "Cannot be blank"]
+        default: "",
+        maxLength: 20
     },
     date: {
         type: Date,
@@ -62,8 +64,14 @@ exports.pageSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: [true, "Cannot be blank"]
     },
-    jots: [exports.jotSchema],
-    images: [exports.imageSchema]
+    jots: {
+        type: [exports.jotSchema],
+        default: []
+    },
+    images: {
+        type: [exports.imageSchema],
+        default: []
+    }
 }, { timestamps: true });
 const Page = mongoose_1.default.model('Page', exports.pageSchema);
 module.exports = Page;

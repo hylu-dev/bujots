@@ -1,32 +1,33 @@
 import { useState, useEffect, useContext, MouseEvent } from 'react';
-import { get } from "../../../utils"
-import PageContext, { IPage } from '../../../contexts/PageContext';
+import { post } from "../../../utils"
+import PageContext, { IPage, emptyPage } from '../../../contexts/PageContext';
+import AllPagesContext from '../../../contexts/AllPagesContext';
 import { motion } from 'framer-motion';
 import TimelineNotch from './TimelineNotch';
 
 export default function Timeline() {
   const token = window.localStorage.getItem("access_token") || "";
   const { page, setPage } = useContext(PageContext);
-  const [pages, setPages] = useState<IPage[]>([]);
+  const { allPages, setAllPages } = useContext(AllPagesContext);
 
-  useEffect(() => {
-    get(`${process.env.REACT_APP_API_URL}/pages/`, token)
+  const addPage = () => {
+    post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token)
       .then(response => {
         if (response.status === 200) {
-          response.json().then(data => {
-            setPages(data);
+          response.json().then((data: IPage) => {
+            setAllPages([data, ...allPages]);
+            setPage(data);
           })
         }
       })
-
-  }, [token, page])
+  }
 
   return (
-    <div className='flex h-full items-center justify-center p-5'>
+    <motion.div className='flex h-full items-center justify-center p-5'>
       <div className='h-full border-l-2 border-paper-dark'>
         <ol className='flex flex-col h-full whitespace-nowrap'>
           {
-            pages.slice(0).reverse().map((p) => {
+            allPages.slice(0).reverse().map((p) => {
               return <TimelineNotch
                 currPage={p}
                 key={p._id}
@@ -34,10 +35,40 @@ export default function Timeline() {
               ></TimelineNotch>
             })
           }
+          <motion.li className={`
+            flex
+            text-xs
+            items-center
+            basis-0
+            grow-[1]
+            select-none
+            transition-all
+            ease-out-cubic
+            origin-left
+            hover:underline
+            `}
+            whileHover={{
+              scaleX: 1.1,
+              scaleY: 1.1,
+            }}>
+            <div className='
+                rounded-full
+                border-double
+                w-4
+                h-4
+                bg-white
+                border-paper-dark
+                border-4
+                mr-1
+                -ml-[9px]
+                after:content-none after:absolute after:bg-white'
+            ></div>
+            <span className='text-paper-dark' onClick={addPage}>New Page</span>
+          </motion.li>
         </ol>
 
       </div>
-    </div>
+    </motion.div>
 
   )
 }

@@ -1,5 +1,10 @@
 import { createContext } from "react";
 
+export interface IJot {
+    _id?: string,
+    text: string
+}
+
 export interface IPage {
     _id: string,
     title: string,
@@ -13,6 +18,10 @@ export interface IPage {
 export interface IPageContext {
     page: IPage,
     setPage: (page: IPage) => void
+}
+
+export const emptyJot: IJot = {
+    text: ""
 }
 
 export const emptyPage: IPage = {

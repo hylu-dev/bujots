@@ -25,7 +25,8 @@ export interface IPage extends Document {
 export const jotSchema = new Schema<IJot>({
     text: {
         type: String,
-        default: ""
+        default: "",
+        maxLength: 100
     }
 }, { timestamps: true })
 
@@ -50,7 +51,8 @@ export const imageSchema = new Schema<IImage>({
 export const pageSchema = new Schema<IPage>({
     title: {
         type: String,
-        required: [true, "Cannot be blank"]
+        default: "",
+        maxLength: 20
     },
     date: {
         type: Date,
@@ -61,8 +63,14 @@ export const pageSchema = new Schema<IPage>({
         type: Schema.Types.ObjectId,
         required: [true, "Cannot be blank"]
     },
-    jots: [jotSchema],
-    images: [imageSchema]
+    jots: {
+        type: [jotSchema],
+        default: []   
+    },
+    images: {
+        type: [imageSchema],
+        default: []
+    }
 
 }, { timestamps: true });
 

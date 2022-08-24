@@ -9,8 +9,9 @@ export default function AnimatedRoute() {
     return (
         <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-                <Route path="/" element={<Login />}></Route>
-                <Route path="/journal" element={<Journal />}></Route>
+                <Route path="/" element={<Login />}/>
+                <Route path="/journal" element={<Journal />}/>
+                <Route path="/journal/:id" element={<Journal />}/>
             </Routes>
         </AnimatePresence>
     );
