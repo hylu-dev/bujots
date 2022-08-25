@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
+import OptionsPanel from '../components/OptionsPanel';
 import PageContext, { emptyPage, IPage } from '../contexts/PageContext';
 import AllPagesContext from '../contexts/AllPagesContext';
 
@@ -20,10 +21,11 @@ export default function Journal() {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then((data: IPage[]) => {
-                        if (!data.length) addPage();
-                        setAllPages(data);
-                        const p = data.find(e => e._id == id) || data[0]
-                        updatePage(p);
+                        // Don't need to reset page contexts if they are already set
+                        if (!page._id) {
+                            setAllPages(data);
+                            updatePage(data[0]);
+                        }
                     })
                 } else {
                     response.json().then(data => {
@@ -67,7 +69,8 @@ export default function Journal() {
     return <>
         <JournalLayout>
             {/* Editor */}
-            <motion.div className='col-start-2 col-end-3 row-start-1 row-end-2 bg-gray-300'>
+            <motion.div className='col-start-2 col-end-3 row-start-1 row-end-2'>
+                <OptionsPanel></OptionsPanel>
             </motion.div>
 
             {/* Stickers */}
@@ -75,14 +78,15 @@ export default function Journal() {
             </motion.div>
 
             {/* Page */}
-            <motion.div className='col-start-2 col-end-3 row-start-2 row-end-3'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { ease: [0.075, 0.82, 0.165, 1], duration: .3 } }}
-                exit={{ opacity: 0, rotate: 40, translateX: -200, translateY: 300 }}
-                transition={{ ease: "easeOut", duration: .5 }}
-            >
-                <JournalPage></JournalPage>
-            </motion.div>
+            {!allPages.length ? null :
+                <motion.div className='col-start-2 col-end-3 row-start-2 row-end-3'
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, rotate: 40, translateX: -200, translateY: 300 }}
+                    transition={{ ease: "easeOut", duration: .5 }}>
+                    <JournalPage></JournalPage>
+                </motion.div>
+            }
 
             {/* Timeline */}
             <motion.div className='col-start-3 col-end-4 row-start-2 row-end-3 justify-self-start'>

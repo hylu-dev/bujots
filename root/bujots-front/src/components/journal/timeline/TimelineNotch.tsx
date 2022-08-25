@@ -14,7 +14,7 @@ export default function TimelineNotch({ currPage, selected }: Props) {
 
     const setCurrentPage = (p: IPage) => {
         setPage(p);
-        navigate(`/journal/${p._id}`)
+        navigate(`/journal/${p._id || ""}`);
     }
 
     return <>

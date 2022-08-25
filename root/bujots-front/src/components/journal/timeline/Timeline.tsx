@@ -1,11 +1,13 @@
-import { useState, useEffect, useContext, MouseEvent } from 'react';
+import { useContext } from 'react';
 import { post } from "../../../utils"
 import PageContext, { IPage, emptyPage } from '../../../contexts/PageContext';
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import AllPagesContext from '../../../contexts/AllPagesContext';
 import { motion } from 'framer-motion';
 import TimelineNotch from './TimelineNotch';
 
 export default function Timeline() {
+  const navigate: NavigateFunction = useNavigate();
   const token = window.localStorage.getItem("access_token") || "";
   const { page, setPage } = useContext(PageContext);
   const { allPages, setAllPages } = useContext(AllPagesContext);
@@ -17,6 +19,7 @@ export default function Timeline() {
           response.json().then((data: IPage) => {
             setAllPages([data, ...allPages]);
             setPage(data);
+            navigate(`/journal/${data._id || ""}`)
           })
         }
       })
@@ -47,6 +50,7 @@ export default function Timeline() {
             origin-left
             hover:underline
             `}
+            onClick={addPage}
             whileHover={{
               scaleX: 1.1,
               scaleY: 1.1,
@@ -63,7 +67,7 @@ export default function Timeline() {
                 -ml-[9px]
                 after:content-none after:absolute after:bg-white'
             ></div>
-            <span className='text-paper-dark' onClick={addPage}>New Page</span>
+            <span className='text-paper-dark'>New Page</span>
           </motion.li>
         </ol>
 

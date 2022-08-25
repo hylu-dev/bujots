@@ -10,7 +10,11 @@ type Props = {
 export default function Jot({ text, onChange, onDelete }: Props) {
 
   return (
-    <motion.li className='relative'>
+    <motion.li className='relative'
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}>
       <input type="text" defaultValue={text} onChange={onChange}
         className={`w-full
         focus:bg-white

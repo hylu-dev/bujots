@@ -8,8 +8,8 @@ import { post, del, patch } from '../../utils';
 
 export default function JournalPage() {
     const { page, setPage } = useContext(PageContext);
-    const { allPages, setAllPages } = useContext(AllPagesContext);
     const [jots, setJots] = useState<IJot[]>([]);
+    const { allPages, setAllPages } = useContext(AllPagesContext);
     const token = window.localStorage.getItem("access_token") || "";
     const date = new Date(page.date);
 
@@ -37,6 +37,9 @@ export default function JournalPage() {
                 if (response.status === 200) {
                     response.json().then(data => {
                         updatePage(data);
+                        const index = allPages.findIndex(p => data._id = p._id);
+                        allPages.splice(index, 1, data);
+                        setAllPages([...allPages]);
                     })
                 }
             })
@@ -46,7 +49,7 @@ export default function JournalPage() {
     const updateTitle = async () => { }
 
     const updateJot = async (text: string, index: number) => {
-        jots[index] = {text: text};
+        jots[index] = { text: text };
     }
 
     const addJot = async () => {
@@ -57,18 +60,6 @@ export default function JournalPage() {
         jots.splice(index);
         setJots([...jots]);
     }
-
-    const removePage = async () => {
-        await del(`${process.env.REACT_APP_API_URL}/pages/${page._id}`,
-          token)
-          .then(response => {
-            if (response.status === 200) {
-              response.json().then(data => {
-                allPages.length ? setPage(allPages[0]) : setPage(emptyPage);
-              })
-            }
-          })
-      }
 
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
