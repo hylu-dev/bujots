@@ -1,77 +1,106 @@
-import { useContext, useState, useEffect } from "react";
-import PageContext, { IJot, IPage, emptyJot, emptyPage } from '../../contexts/PageContext';
+import { useContext, useState, useEffect, useRef } from "react";
+import PageContext, { IPage, emptyJot } from '../../contexts/PageContext';
 import AllPagesContext from '../../contexts/AllPagesContext';
 import Jot from './Jot';
 import { motion } from 'framer-motion';
-import { post, del, patch } from '../../utils';
+import { patch } from '../../utils';
 
+const SaveState = Object.freeze({
+    UNSAVED: "Unsaved",
+    SAVING: "Saving",
+    SAVED: "Saved"
+})
 
 export default function JournalPage() {
-    const { page, setPage } = useContext(PageContext);
-    const [jots, setJots] = useState<IJot[]>([]);
-    const { allPages, setAllPages } = useContext(AllPagesContext);
+    const firstUpdate = useRef(true);
+
     const token = window.localStorage.getItem("access_token") || "";
+    const { page, setPage } = useContext(PageContext);
+    const { allPages, setAllPages } = useContext(AllPagesContext);
+    const [saveStatus, setSaveStatus] = useState(SaveState.SAVED);
+    const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
+    const [pageCopy, setPageCopy] = useState({...page});
+
     const date = new Date(page.date);
 
     useEffect(() => {
-        setJots(page.jots);
-    }, [page])
+        if (firstUpdate.current) firstUpdate.current = false;
+        else {
+            console.log(firstUpdate);
+            triggerSave();
+        }
+    }, [])
 
-    const updatePage = (p: IPage) => {
-        if (p) setPage({
-            _id: p._id,
-            title: p.title,
-            date: p.date,
-            body: p.body,
-            author: p.author,
-            jots: p.jots,
-            images: p.images
-        });
-    }
-
-    const updateJots = async () => {
-        await patch(`${process.env.REACT_APP_API_URL}/jots/updateAll/${page._id}`,
-            jots,
+    const updatePage = async (p: IPage) => {
+        setPage(p);
+        return patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`,
+            p,
             token)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(data => {
-                        updatePage(data);
-                        const index = allPages.findIndex(p => data._id = p._id);
+                        const index = allPages.findIndex(p => data._id == p._id);
                         allPages.splice(index, 1, data);
                         setAllPages([...allPages]);
                     })
                 }
             })
+
     }
 
+    const triggerSave = async () => {
+        clearTimeout(timer);
+        setSaveStatus(SaveState.UNSAVED);
+        setTimer(setTimeout(() => {
+            setSaveStatus(SaveState.SAVING);
+            updatePage(pageCopy).then(() => {
+                setSaveStatus(SaveState.SAVED);
+            })
+        }, 2000));
+    }
 
-    const updateTitle = async () => { }
-
-    const updateJot = async (text: string, index: number) => {
-        jots[index] = { text: text };
+    const quickSave = async () => {
+        clearTimeout(timer);
+        updatePage(pageCopy).then(() => {
+            setSaveStatus(SaveState.SAVED);
+        })
     }
 
     const addJot = async () => {
-        setJots([...jots, emptyJot]);
+        const p = { ...pageCopy }
+        p.jots.push(emptyJot)
+        setPageCopy(p);
     }
 
     const removeJot = async (index: number) => {
-        jots.splice(index);
-        setJots([...jots]);
+        const p = { ...pageCopy }
+        p.jots.splice(index);
+        setPageCopy(p);
+    }
+
+    const updateJot = async (text: string, index: number) => {
+        const p = { ...pageCopy }
+        p.jots[index].text = text;
+        setPageCopy(p);
+    }
+
+    const updateTitle = async (text: string) => {
+        const p = { ...pageCopy }
+        p.title = text;
+        setPageCopy(p);
     }
 
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
         <div className='flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'>
             <div className="flex justify-between basis-0 grow-[1] border-b-2 border-paper-dark px-1">
-                <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={page.title} />
+                <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={pageCopy.title} onChange={e => updateTitle(e.target.value)} />
                 <small className="flex items-end">{date.toDateString()}</small>
             </div>
             <div className="p-2 basis-0 grow-[20]">
                 <ol className='flex flex-col h-full whitespace-nowrap gap-2'>
                     {
-                        jots.map((j, index) => {
+                        pageCopy.jots.map((j, index) => {
                             return <Jot key={j._id || index} onDelete={() => removeJot(index)} text={j.text} onChange={e => updateJot(e.target.value, index)}></Jot>
                         })
                     }
@@ -83,7 +112,7 @@ export default function JournalPage() {
                     </motion.li>
                 </ol>
             </div>
-            <button className="hover:underline" onClick={updateJots}>Test Save</button>
+            <button className="hover:underline" onClick={quickSave}>{saveStatus}</button>
 
         </div>
     </>

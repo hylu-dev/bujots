@@ -17,8 +17,8 @@ export default function Timeline() {
       .then(response => {
         if (response.status === 200) {
           response.json().then((data: IPage) => {
-            setAllPages([data, ...allPages]);
             setPage(data);
+            setAllPages([data, ...allPages]);
             navigate(`/journal/${data._id || ""}`)
           })
         }

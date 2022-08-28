@@ -22,7 +22,6 @@ export default function OptionsPanel() {
             const currPage = allPages.findIndex(p => page._id == p._id);
             allPages.splice(currPage, 1);
             setAllPages([...allPages]);
-            console.log(currPage, allPages.length)
             if (allPages.length == 1) switchPage(allPages[0]); // iff on page 0 and there's 1 page left
             else if (currPage == 0) allPages.length > 1 ? switchPage(allPages[currPage]) : switchPage(emptyPage); // iff on page 0 and there's > 1 page left
             else allPages.length > 1 ? switchPage(allPages[currPage-1]) : switchPage(emptyPage); // iff not on page 0

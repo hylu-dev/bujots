@@ -41,12 +41,12 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     if (!(await Page.findById(target))) {
         return res.status(400).json({ error: 'Page does not exist' })
     }
-    await Page.findByIdAndUpdate(target, page, { new: true }).then(
+    await Page.findByIdAndUpdate(target, page).then(
         (page: IPage) => {
             if (!page) return res.status(404).json({ error: 'Page does not exist' });
             return page.author == userID ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
         }
-    ).catch((err: Error) => res.status(400).json({ error: 'err' }))
+    ).catch((err: Error) => res.status(400).json({ error: err }))
 }).get('/:postID', verifyToken, async (req: Request, res: Response) => {
     const target = req.params.postID;
     if (!Types.ObjectId.isValid(target)) return res.status(400).json({ error: 'Invalid ID format' });

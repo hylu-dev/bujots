@@ -5,9 +5,10 @@ type Props = {
   text: string,
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
   onDelete?: () => void
+  onBlur?: () => void
 };
 
-export default function Jot({ text, onChange, onDelete }: Props) {
+export default function Jot({ text, onChange, onDelete, onBlur }: Props) {
 
   return (
     <motion.li className='relative'
@@ -15,7 +16,7 @@ export default function Jot({ text, onChange, onDelete }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}>
-      <input type="text" defaultValue={text} onChange={onChange}
+      <input type="text" defaultValue={text} onChange={onChange} onBlur={onBlur}
         className={`w-full
         focus:bg-white
         outline-none

@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { get, post } from "../utils"
 import { motion } from 'framer-motion';
@@ -21,11 +21,10 @@ export default function Journal() {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then((data: IPage[]) => {
-                        // Don't need to reset page contexts if they are already set
-                        if (!page._id) {
-                            setAllPages(data);
-                            updatePage(data[0]);
-                        }
+                        // Set page to most recent if not already in context
+                        const index = data.findIndex(p => p._id == id);
+                        setAllPages(data);
+                        if (!page._id) setPage(data[index > 0 ? index : 0]);
                     })
                 } else {
                     response.json().then(data => {
@@ -35,30 +34,6 @@ export default function Journal() {
             })
 
     }, [])
-
-    const addPage = async () => {
-        await post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token)
-            .then(response => {
-                if (response.status === 200) {
-                    response.json().then((data: IPage) => {
-                        setAllPages([data, ...allPages]);
-                        setPage(data);
-                    })
-                }
-            })
-    }
-
-    const updatePage = (p: IPage) => {
-        if (p) setPage({
-            _id: p._id,
-            title: p.title,
-            date: p.date,
-            body: p.body,
-            author: p.author,
-            jots: p.jots,
-            images: p.images
-        });
-    }
 
     const logout = () => {
         window.localStorage.removeItem("access_token");
