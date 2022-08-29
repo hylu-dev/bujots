@@ -15,9 +15,7 @@ const initialState: JournalState = {
     current: -1
 }
 
-export const retrievePages = createAsyncThunk('pages/getPages', async () => {
-
-})
+// export const retrievePages = createAsyncThunk('pages/getPages', async () => {})
 
 export const journalSlice = createSlice({
     name: "journal",
