@@ -18,10 +18,11 @@ module.exports = {
       'sans': ['Lora', ...defaultTheme.fontFamily.sans],
     },
     gridTemplateRows: {
-      'journal': '100px 500px 100px'
+      'journal': '80px 500px 80px'
     },
     gridTemplateColumns: {
-      'journal': '200px 354px 200px'
+      'journal': '200px 354px 200px',
+      'options': 'repeat(4, 1fr)'
     },
     transitionTimingFunction: {
       'out-cubic': 'cubic-bezier(0.075, 0.82, 0.165, 1)'
