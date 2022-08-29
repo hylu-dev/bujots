@@ -1,28 +1,24 @@
-import { useContext } from 'react';
 import { post } from "../../../utils"
-import PageContext, { IPage, emptyPage } from '../../../contexts/PageContext';
-import { NavigateFunction, useNavigate } from "react-router-dom";
-import AllPagesContext from '../../../contexts/AllPagesContext';
 import { motion } from 'framer-motion';
 import TimelineNotch from './TimelineNotch';
 
-export default function Timeline() {
-  const navigate: NavigateFunction = useNavigate();
-  const token = window.localStorage.getItem("access_token") || "";
-  const { page, setPage } = useContext(PageContext);
-  const { allPages, setAllPages } = useContext(AllPagesContext);
+import { useSelector, useDispatch } from 'react-redux';
+import { addPage, getPages } from '../../../slices/journalSlice'
+import { emptyPage, IPage } from '../../../types';
 
-  const addPage = () => {
-    post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token)
-      .then(response => {
-        if (response.status === 200) {
-          response.json().then((data: IPage) => {
-            setPage(data);
-            setAllPages([data, ...allPages]);
-            navigate(`/journal/${data._id || ""}`)
-          })
-        }
-      })
+export default function Timeline() {
+  const token = window.localStorage.getItem("access_token") || "";
+  const pages = useSelector(getPages);
+  const dispatch = useDispatch();
+
+  const newPage = () => {
+    post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token).then(response => {
+      if (response.status === 200) {
+        response.json().then((data: IPage) => {
+          dispatch(addPage(data));
+        })
+      }
+    });
   }
 
   return (
@@ -30,11 +26,10 @@ export default function Timeline() {
       <div className='h-full border-l-2 border-paper-dark'>
         <ol className='flex flex-col h-full whitespace-nowrap'>
           {
-            allPages.slice(0).reverse().map((p) => {
+            pages.slice(0).reverse().map((p: IPage, index: number) => {
               return <TimelineNotch
-                currPage={p}
-                key={p._id}
-                selected={p._id === page._id}
+                pageIndex={index}
+                key={p._id || index}
               ></TimelineNotch>
             })
           }
@@ -50,7 +45,7 @@ export default function Timeline() {
             origin-left
             hover:underline
             `}
-            onClick={addPage}
+            onClick={newPage}
             whileHover={{
               scaleX: 1.1,
               scaleY: 1.1,

@@ -11,7 +11,6 @@ export default function AnimatedRoute() {
             <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Login />}/>
                 <Route path="/journal" element={<Journal />}/>
-                <Route path="/journal/:id" element={<Journal />}/>
             </Routes>
         </AnimatePresence>
     );

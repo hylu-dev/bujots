@@ -1,30 +1,33 @@
-import { useEffect, useContext, useState } from 'react';
-import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
-import { get, post } from "../utils"
+import { useEffect } from 'react';
+import { NavigateFunction, useNavigate } from "react-router-dom";
+
+import { get } from "../utils"
 import { motion } from 'framer-motion';
+
+import { IPage } from '../types';
+import { useSelector, useDispatch, } from 'react-redux';
+import { getPages, setPages, switchPage } from '../slices/journalSlice'
+
 import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
 import OptionsPanel from '../components/OptionsPanel';
-import PageContext, { emptyPage, IPage } from '../contexts/PageContext';
-import AllPagesContext from '../contexts/AllPagesContext';
 
 export default function Journal() {
     const navigate: NavigateFunction = useNavigate();
     const token = window.localStorage.getItem("access_token") || "";
-    const { page, setPage } = useContext(PageContext);
-    const { allPages, setAllPages } = useContext(AllPagesContext);
-    const { id } = useParams();
+    const pages = useSelector(getPages);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         get(`${process.env.REACT_APP_API_URL}/pages/`, token)
             .then(response => {
                 if (response.status === 200) {
                     response.json().then((data: IPage[]) => {
-                        // Set page to most recent if not already in context
-                        const index = data.findIndex(p => p._id == id);
-                        setAllPages(data);
-                        if (!page._id) setPage(data[index > 0 ? index : 0]);
+                        if (data.length) {
+                            dispatch(setPages(data));
+                        }
+
                     })
                 } else {
                     response.json().then(data => {
@@ -37,7 +40,7 @@ export default function Journal() {
 
     const logout = () => {
         window.localStorage.removeItem("access_token");
-        setPage(emptyPage);
+        dispatch(switchPage(-1))
         navigate("/");
     }
 
@@ -53,7 +56,7 @@ export default function Journal() {
             </motion.div>
 
             {/* Page */}
-            {!allPages.length ? null :
+            {!pages.length ? null :
                 <motion.div className='col-start-2 col-end-3 row-start-2 row-end-3'
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
