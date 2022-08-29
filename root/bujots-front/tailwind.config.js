@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */ 
+/** @type {import('tailwindcss').Config} */
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
@@ -26,6 +26,15 @@ module.exports = {
     },
     transitionTimingFunction: {
       'out-cubic': 'cubic-bezier(0.075, 0.82, 0.165, 1)'
+    },
+    dropShadow: {
+      'sticker': [
+        '2px 2px 0 white',
+        '-2px 2px 0 white',
+        '2px -2px 0 white',
+        '-2px -2px 0 white',
+        '1px 1px 2px rgba(0,0,0,.7)'
+      ]
     }
   },
   plugins: [],
