@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 import { JsonWebTokenError } from 'jsonwebtoken';
 const bcrypt = require('bcrypt');
 import { Request, Response } from 'express';

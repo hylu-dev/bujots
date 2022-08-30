@@ -23,13 +23,17 @@ export default function Register() {
         }, token)
         const errorList: String[] = [];
         await request.then(res => {
+            
             if (res.status === 200) {
                 res.json().then(data => {
                     navigate("/");
                 })
-            } else {
+            } else if (res.status === 400) {
                 res.json().then(data => {
-                    errorList.push(data.error)
+                    
+                    data.errors.forEach((err: any) => {
+                        errorList.push(err.msg)
+                    })
                     setErrors(errorList);
                 })
             }
@@ -39,8 +43,8 @@ export default function Register() {
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
         <JournalCover>
-            <ul className="has-text-danger">
-                {errors.map(item => <li className="list-disc text-sm text-red-700 pb-2">{item}</li>)}
+            <ul className="flex flex-col px-5">
+                {errors.map(item => <li className="text-center list-disc text-xs text-red-800 pb-2">{item}</li>)}
             </ul>
             <form action="" className='flex items-center flex-col'>
                 <FormInput

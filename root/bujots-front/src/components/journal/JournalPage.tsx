@@ -24,20 +24,20 @@ export default function JournalPage() {
     const date = new Date(page.date);
 
     useEffect(() => {
-        //triggerSave();
+        triggerSave();
     }, [page])
 
-    const updatePage = async (p: IPage) => {
-        dispatch(setPage(p));
-        return patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`, p, token);
+    const updatePage = async () => {
+        return patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`, page, token);
     }
 
     const triggerSave = async () => {
         clearTimeout(timer);
         setSaveStatus(SaveState.UNSAVED);
+        dispatch(setPage(page));
         setTimer(setTimeout(() => {
             setSaveStatus(SaveState.SAVING);
-            updatePage(page).then(() => {
+            updatePage().then(() => {
                 setSaveStatus(SaveState.SAVED);
             })
         }, 2000));
@@ -45,7 +45,8 @@ export default function JournalPage() {
 
     const quickSave = async () => {
         clearTimeout(timer);
-        updatePage(page).then(() => {
+        dispatch(setPage(page));
+        updatePage().then(() => {
             setSaveStatus(SaveState.SAVED);
         })
     }
@@ -54,14 +55,15 @@ export default function JournalPage() {
         {/* A4 Aspect Ratio 1:1.4142 */}
         <div className='flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'>
             <div className="flex justify-between basis-0 grow-[1] border-b-2 border-paper-dark px-1" key={page._id}>
-                <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={page.title} onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.target.value))} />
+                <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={page.title}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.target.value))} onBlur={triggerSave} />
                 <small className="flex items-end">{date.toDateString()}</small>
             </div>
             <div className="p-2 basis-0 grow-[20]">
                 <ol className='flex flex-col h-full whitespace-nowrap gap-2'>
                     {
                         page.jots.map((j: IJot, index: number) => {
-                            return <Jot key={j._id || index} index={index} text={j.text}></Jot>
+                            return <Jot key={j._id || index} index={index} text={j.text} saveHandler={triggerSave}></Jot>
                         })
                     }
                     <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"

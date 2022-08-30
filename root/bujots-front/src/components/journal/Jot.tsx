@@ -5,10 +5,11 @@ import { getCurrentPage, setJots } from '../../slices/journalSlice'
 
 type Props = {
   text: string,
-  index: number
+  index: number,
+  saveHandler: () => void
 };
 
-export default function Jot({ text, index }: Props) {
+export default function Jot({ text, index, saveHandler }: Props) {
   const page = useSelector(getCurrentPage);
   const dispatch = useDispatch();
 
@@ -30,7 +31,9 @@ export default function Jot({ text, index }: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}>
-      <input type="text" defaultValue={text} onChange={ (e: ChangeEvent<HTMLInputElement>) => updateJot(e.target.value)}
+      <input type="text" defaultValue={text}
+        onChange={(e: ChangeEvent<HTMLInputElement>) => updateJot(e.target.value)}
+        onBlur={saveHandler}
         className={`w-full
         focus:bg-white
         outline-none

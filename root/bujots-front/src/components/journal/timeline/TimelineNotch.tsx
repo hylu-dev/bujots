@@ -1,19 +1,25 @@
 import { motion } from 'framer-motion'
 import { useSelector, useDispatch } from 'react-redux';
 import { switchPage, getCurrentIndex, getCurrentPage } from '../../../slices/journalSlice'
-import { RootState } from '../../../store';
+import { patch } from '../../../utils';
 
 type Props = {
     pageIndex: number,
 };
 
 export default function TimelineNotch({ pageIndex }: Props) {
+    const token = window.localStorage.getItem("access_token") || "";
     const currPage = useSelector(getCurrentIndex);
     const page = useSelector(getCurrentPage)
     const dispatch = useDispatch();
 
     const selected = () => {
         return pageIndex === currPage ? true : false;
+    }
+
+    const updatePage = () => {
+        patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`, page, token);
+        dispatch(switchPage(pageIndex))
     }
 
     return <>
@@ -33,7 +39,7 @@ export default function TimelineNotch({ pageIndex }: Props) {
                 scale: selected() ? 1.2 : 1,
                 fontWeight: selected() ? 'bold' : 'normal',
             }}
-            onClick={() => dispatch(switchPage(pageIndex))}
+            onClick={updatePage}
             whileHover={{ scaleX: 1.1, scaleY: 1.1, }}
             whileTap={{ scaleX: 1, scaleY: 1 }}>
             {/* note notches are 10px with width+border so 5px is the center point */}

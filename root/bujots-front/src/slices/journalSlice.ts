@@ -12,7 +12,7 @@ interface JournalState {
 const initialState: JournalState = {
     pages: [],
     status: 'idle',
-    current: -1
+    current: -1 
 }
 
 // export const retrievePages = createAsyncThunk('pages/getPages', async () => {})
