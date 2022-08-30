@@ -46,10 +46,8 @@ export default function Timeline() {
             hover:underline
             `}
             onClick={newPage}
-            whileHover={{
-              scaleX: 1.1,
-              scaleY: 1.1,
-            }}>
+            whileHover={{ scaleX: 1.1, scaleY: 1.1 }}
+            whileTap={{ scaleX: 1, scaleY: 1 }}>
             <div className='
                 rounded-full
                 border-double

@@ -1,11 +1,11 @@
-import { useState, useEffect, MouseEvent } from 'react'
+import { useState, MouseEvent } from 'react'
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import FormInput from '../components/FormInput'
+import JournalCover from '../components/JournalCover';
 import Button from '../components/Button'
-import JournalCover from '../components/JournalCover'
-import { get, post } from '../utils'
+import { post } from '../utils'
 
-export default function Login() {
+export default function Register() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<String[]>([]);
@@ -14,22 +14,10 @@ export default function Login() {
     const navigate: NavigateFunction = useNavigate();
     const token = window.localStorage.getItem("access_token") || "";
 
-    useEffect(() => {
-        get(`${process.env.REACT_APP_API_URL}/auth/getCurrentUser`, token)
-            .then(response => {
-                if (response.status === 200) {
-                    response.json().then(() => {
-                        navigate("/journal");
-                    })
-                }
-            })
-
-    }, [token])
-
-    const login_request = async (e: MouseEvent) => {
+    const register_request = async (e: MouseEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        const request = post(`${process.env.REACT_APP_API_URL}/auth/login`, {
+        const request = post(`${process.env.REACT_APP_API_URL}/users/add`, {
             username: username,
             password: password
         }, token)
@@ -37,8 +25,7 @@ export default function Login() {
         await request.then(res => {
             if (res.status === 200) {
                 res.json().then(data => {
-                    localStorage.setItem('access_token', data.accessToken);
-                    navigate("/journal");
+                    navigate("/");
                 })
             } else {
                 res.json().then(data => {
@@ -67,15 +54,15 @@ export default function Login() {
                 />
                 <Button
                     styles={"bg-cover-dark w-fit px-3 my-5 rounded"}
-                    value={"Login"}
-                    handler={login_request}
+                    value={"Create"}
+                    handler={register_request}
                     type={"submit"}
                 ></Button>
             </form>
             <Button
                     styles={"text-grey"}
-                    value={"Register"}
-                    handler={() => navigate('/register')}
+                    value={"Back"}
+                    handler={() => navigate('/')}
             ></Button>
         </JournalCover>
     </>

@@ -65,9 +65,8 @@ export default function JournalPage() {
                         })
                     }
                     <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"
-                        whileHover={{
-                            scale: 1.1
-                        }}>
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 1 }}>
                         <span>+</span>
                     </motion.li>
                 </ol>

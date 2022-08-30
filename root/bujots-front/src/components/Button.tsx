@@ -1,4 +1,5 @@
 import { MouseEvent } from 'react'
+import { motion } from 'framer-motion';
 
 type Props = {
     styles?: String,
@@ -7,17 +8,19 @@ type Props = {
     type?: "button" | "submit" | "reset" | undefined
 };
 
-export default function Button({styles, handler, value, type}: Props) {
+export default function Button({ styles, handler, value, type }: Props) {
     const styleClasses = styles || "";
     const buttonType = type || "button"
 
     return <>
-        <button
+        <motion.button
             className={`${styleClasses}`}
             onClick={handler}
             type={buttonType}
+            whileHover={{scale:1.1}}
+            whileTap={{scale:1}}
         >
             {value}
-        </button>
+        </motion.button>
     </>
 }

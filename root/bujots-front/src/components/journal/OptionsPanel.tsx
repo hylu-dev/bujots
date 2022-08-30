@@ -1,7 +1,7 @@
-import { del } from '../utils';
+import { del } from '../../utils';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentPage, getCurrentIndex, getPages, removePage } from '../slices/journalSlice';
+import { getCurrentPage, getCurrentIndex, getPages, removePage } from '../../slices/journalSlice';
 
 
 export default function OptionsPanel() {
@@ -23,7 +23,7 @@ export default function OptionsPanel() {
   }
 
   return (
-    <motion.div className="grid gap-2 grid-cols-options grid-flow-col p-2 h-full w-full text-paper-dark">
+    <motion.div className="grid gap-2 grid-cols-options grid-flow-col p-2 h-full w-full">
       <motion.button className="grid place-content-center border-2 border-paper-dark rounded p-2"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 1 }}

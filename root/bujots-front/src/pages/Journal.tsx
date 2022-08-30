@@ -11,7 +11,8 @@ import { getPages, setPages, switchPage } from '../slices/journalSlice'
 import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
-import OptionsPanel from '../components/OptionsPanel';
+import OptionsPanel from '../components/journal/OptionsPanel'
+import StickerTray from '../components/journal/StickerTray';
 
 export default function Journal() {
     const navigate: NavigateFunction = useNavigate();
@@ -21,13 +22,10 @@ export default function Journal() {
 
     useEffect(() => {
         get(`${process.env.REACT_APP_API_URL}/pages/`, token)
-            .then(response => {
+            .then(response => {;
                 if (response.status === 200) {
                     response.json().then((data: IPage[]) => {
-                        if (data.length) {
-                            dispatch(setPages(data));
-                        }
-
+                        dispatch(setPages(data));
                     })
                 } else {
                     response.json().then(data => {
@@ -52,7 +50,8 @@ export default function Journal() {
             </motion.div>
 
             {/* Stickers */}
-            <motion.div className='col-start-1 col-end-2 row-start-2 row-end-3 bg-gray-300'>
+            <motion.div className='col-start-1 col-end-2 row-start-2 row-end-3'>
+                <StickerTray></StickerTray>
             </motion.div>
 
             {/* Page */}

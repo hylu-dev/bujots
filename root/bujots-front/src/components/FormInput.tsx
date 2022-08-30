@@ -6,7 +6,7 @@ type Props = {
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 };
 
-export default function LoginInput({ placeholder, type, onChange }: Props) {
+export default function FormInput({ placeholder, type, onChange }: Props) {
     return <>
         <div className='flex justify-center'>
             <input type={type || "text"} placeholder={placeholder} className='

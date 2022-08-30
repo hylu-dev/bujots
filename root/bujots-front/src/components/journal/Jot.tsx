@@ -40,7 +40,8 @@ export default function Jot({ text, index }: Props) {
       <motion.div className='grid place-content-center select-none text-white text-[.5rem] rounded-full h-3 w-3 bg-paper-dark
       absolute -top-1.5 -right-1.5'
         onClick={removeJot}
-        whileHover={{ scale: 1.3 }}>
+        whileHover={{ scale: 1.3 }}
+        whileTap={{ scale: 1 }}>
         &#10005;
       </motion.div>
     </motion.li >

@@ -29,10 +29,16 @@ module.exports = {
     },
     dropShadow: {
       'sticker': [
-        '2px 2px 0 white',
-        '-2px 2px 0 white',
-        '2px -2px 0 white',
-        '-2px -2px 0 white',
+        '1.5px 1.5px 0 white',
+        '-1.5px 1.5px 0 white',
+        '1.5px -1.5px 0 white',
+        '-1.5px -1.5px 0 white',
+
+        '1px 0px 0 white',
+        '-1px 0px 0 white',
+        '0px 1px 0 white',
+        '0px -1px 0 white',
+
         '1px 1px 2px rgba(0,0,0,.7)'
       ]
     }

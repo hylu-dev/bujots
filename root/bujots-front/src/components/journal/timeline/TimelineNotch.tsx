@@ -34,10 +34,8 @@ export default function TimelineNotch({ pageIndex }: Props) {
                 fontWeight: selected() ? 'bold' : 'normal',
             }}
             onClick={() => dispatch(switchPage(pageIndex))}
-            whileHover={{
-                scaleX: 1.1,
-                scaleY: 1.1,
-            }}>
+            whileHover={{ scaleX: 1.1, scaleY: 1.1, }}
+            whileTap={{ scaleX: 1, scaleY: 1 }}>
             {/* note notches are 10px with width+border so 5px is the center point */}
             <div className='
                 rounded-full
