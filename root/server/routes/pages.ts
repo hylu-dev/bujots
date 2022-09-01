@@ -11,11 +11,11 @@ import { verifyToken } from '../utils/authentication'
 router.get('/', verifyToken, async (req: Request, res: Response) => {
     const id = req.user ? req.user._id : null;
     await Page.find({ author: id }).sort({ "createdAt": -1 }).exec()
-        .then((users: any) => res.json(users))
+        .then((pages: any) => res.json(pages))
         .catch((err: any) => res.status(400).json({ Error: err }));
 }).get('/all', async (req: Request, res: Response) => {
     Page.find()
-        .then((users: any) => res.json(users))
+        .then((pages: any) => res.json(pages))
         .catch((err: any) => res.status(400).json({ Error: err }));
 }).post('/add', verifyToken, async (req: Request, res: Response) => {
     const page: IPage = req.body;
@@ -25,7 +25,6 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
     const newUser = new Page({
         title: page.title,
         date: date,
-        body: page.body,
         author: author
     })
 

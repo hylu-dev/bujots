@@ -23,46 +23,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pageSchema = exports.jotSchema = exports.stickerSchema = void 0;
+exports.imageSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const image_model_1 = require("./image.model");
-exports.stickerSchema = new mongoose_1.Schema({
-    position: [Number, Number],
-    image_id: String
-});
-exports.jotSchema = new mongoose_1.Schema({
-    text: {
+exports.imageSchema = new mongoose_1.Schema({
+    name: {
         type: String,
-        default: "",
-        maxLength: 100
-    }
-}, { timestamps: true });
-exports.pageSchema = new mongoose_1.Schema({
-    title: {
-        type: String,
-        default: "",
-        maxLength: 20
-    },
-    date: {
-        type: Date,
-        default: Date.now()
-    },
-    author: {
-        type: mongoose_1.Schema.Types.ObjectId,
         required: [true, "Cannot be blank"]
     },
-    jots: {
-        type: [exports.jotSchema],
-        default: []
+    data: {
+        type: Buffer,
+        required: [true, "Cannot be blank"]
     },
-    images: {
-        type: [image_model_1.imageSchema],
-        default: []
-    },
-    stickers: {
-        type: [exports.stickerSchema],
-        defaut: []
-    }
+    author: mongoose_1.Schema.Types.ObjectId
 }, { timestamps: true });
-const Page = mongoose_1.default.model('Page', exports.pageSchema);
-module.exports = Page;
+const Image = mongoose_1.default.model('Image', exports.imageSchema);
+module.exports = Image;

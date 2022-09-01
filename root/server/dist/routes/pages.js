@@ -16,11 +16,11 @@ const authentication_1 = require("../utils/authentication");
 router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.user ? req.user._id : null;
     yield Page.find({ author: id }).sort({ "createdAt": -1 }).exec()
-        .then((users) => res.json(users))
+        .then((pages) => res.json(pages))
         .catch((err) => res.status(400).json({ Error: err }));
 })).get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     Page.find()
-        .then((users) => res.json(users))
+        .then((pages) => res.json(pages))
         .catch((err) => res.status(400).json({ Error: err }));
 })).post('/add', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const page = req.body;
@@ -29,7 +29,6 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
     const newUser = new Page({
         title: page.title,
         date: date,
-        body: page.body,
         author: author
     });
     newUser.save()

@@ -24,6 +24,7 @@ connection.once('open', () => {
 })
 
 app.use('/api/users', require('./routes/users'));
+app.use('/api/images', require('./routes/images'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api/jots', require('./routes/jots'));
 app.use('/api/auth', require('./routes/auth'));

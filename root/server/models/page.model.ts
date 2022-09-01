@@ -1,50 +1,34 @@
 import mongoose, { Schema, Document, Types } from 'mongoose'
+import { IImage, imageSchema } from './image.model'
 
 export interface IJot extends Document {
     text: string
 }
 
-export interface IImage extends Document {
-    name: string,
+export interface ISticker extends Document {
     position: [number, number],
-    image: {
-        data: Buffer,
-        contentType: string
-    }
+    image_id: string
 }
 
 export interface IPage extends Document {
     title: string,
     date: Date,
-    body: string,
     author: Schema.Types.ObjectId,
     jots: Types.DocumentArray<IJot>,
     images: Types.DocumentArray<IImage>
+    stickers: Types.DocumentArray<ISticker>
 }
+
+export const stickerSchema = new Schema<ISticker>({
+    position: [Number, Number],
+    image_id: String
+})
 
 export const jotSchema = new Schema<IJot>({
     text: {
         type: String,
         default: "",
         maxLength: 100
-    }
-}, { timestamps: true })
-
-export const imageSchema = new Schema<IImage>({
-    name: {
-        type: String,
-        required: [true, "Cannot be blank"]
-    },
-    position: {
-        type: [Number, Number],
-        required: [true, "Cannot be blank"]
-    },
-    image: {
-        type: {
-            data: Buffer,
-            contentType: String
-        },
-        required: [true, "Cannot be blank"]
     }
 }, { timestamps: true })
 
@@ -58,7 +42,6 @@ export const pageSchema = new Schema<IPage>({
         type: Date,
         default: Date.now()
     },
-    body: String,
     author: {
         type: Schema.Types.ObjectId,
         required: [true, "Cannot be blank"]
@@ -70,6 +53,10 @@ export const pageSchema = new Schema<IPage>({
     images: {
         type: [imageSchema],
         default: []
+    },
+    stickers: {
+        type: [stickerSchema],
+        defaut: []
     }
 
 }, { timestamps: true });
