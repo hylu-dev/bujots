@@ -21,7 +21,7 @@ export default function Sticker({ imageID, index }: Props) {
         getPNG(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
             response.json().then(async data => {
                 const img = await Buffer.from(data).toString("base64");
-                
+
                 const imgSource = `data:image/png;base64,${img}`
                 setImage(imgSource);
                 dispatch(addImageFile({
@@ -30,20 +30,23 @@ export default function Sticker({ imageID, index }: Props) {
                 }))
 
                 setIsLoading(false);
-                
+
             })
         })
     }, [])
 
     const deleteImage = () => {
+        setIsLoading(true);
         del(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
             if (response.status === 200) {
                 response.json().then(() => {
                     dispatch(removeImage(index));
                 })
+            } else {
+                setIsLoading(false);
             }
         })
-    }
+    }   
 
     return (
         <div className='relative grid place-content-center'>
