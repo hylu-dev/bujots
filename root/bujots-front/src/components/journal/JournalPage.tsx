@@ -1,11 +1,12 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { IPage, IJot } from "../../types";
+import { IPage, IJot, ISticker } from "../../types";
 import Jot from './Jot';
 import { motion } from 'framer-motion';
 import { patch } from '../../utils';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentPage, setPage, addJot, setTitle } from '../../slices/journalSlice'
+import PlacedSticker from "./PlacedSticker";
 
 const SaveState = Object.freeze({
     UNSAVED: "Unsaved",
@@ -53,7 +54,14 @@ export default function JournalPage() {
 
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
-        <div className='flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'>
+        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5 overflow-hidden'>
+            
+            {
+                page.stickers.map((sticker: ISticker, index: number) => {
+                    return <PlacedSticker key={sticker._id || index} sticker={sticker}></PlacedSticker>
+                })
+            }
+
             <div className="flex justify-between basis-0 grow-[1] border-b-2 border-paper-dark px-1" key={page._id}>
                 <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={page.title}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => dispatch(setTitle(e.target.value))} onBlur={triggerSave} />

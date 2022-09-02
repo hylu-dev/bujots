@@ -2,7 +2,7 @@ import { useState, MouseEvent } from 'react'
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import FormInput from '../components/FormInput'
 import JournalCover from '../components/JournalCover';
-import Button from '../components/Button'
+import Button from '../components/common/Button'
 import { post } from '../utils'
 
 export default function Register() {

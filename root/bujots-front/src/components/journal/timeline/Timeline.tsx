@@ -5,11 +5,13 @@ import TimelineNotch from './TimelineNotch';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPage, getPages } from '../../../slices/journalSlice'
 import { emptyPage, IPage } from '../../../types';
+import { useState } from "react";
 
 export default function Timeline() {
   const token = window.localStorage.getItem("access_token") || "";
   const pages = useSelector(getPages);
   const dispatch = useDispatch();
+  //console.log(pages.map(page => page.date));
 
   const newPage = () => {
     post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token).then(response => {
@@ -21,15 +23,24 @@ export default function Timeline() {
     });
   }
 
+  const pageToDateString = (p: IPage) => {
+    const date = new Date(p.date);
+    console.log(date.toDateString())
+    return date.toDateString();
+  }
+
   return (
     <motion.div className='flex h-full items-center justify-center p-5'>
       <div className='h-full border-l-2 border-paper-dark'>
         <ol className='flex flex-col h-full whitespace-nowrap'>
           {
-            pages.slice(0).reverse().map((p: IPage, index: number) => {
+            pages.slice(0).map((p: IPage, index: number, arr: IPage[]) => {
               return <TimelineNotch
                 pageIndex={index}
                 key={p._id || index}
+                sameDate={
+                  (pageToDateString(arr[index]) === pageToDateString(arr[index+1] || "") ? true : false)
+                }
               ></TimelineNotch>
             })
           }

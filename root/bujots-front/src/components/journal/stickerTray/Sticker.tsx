@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { del, getPNG } from '../../../utils';
 import { Buffer } from "buffer";
 import { motion } from "framer-motion";
 import Spinner from '../../common/Spinner';
 import { useDispatch } from 'react-redux';
-import { removeImage } from '../../../slices/journalSlice';
+import { addImageFile, removeImage } from '../../../slices/journalSlice';
 
 type Props = {
     imageID: string
@@ -21,8 +21,16 @@ export default function Sticker({ imageID, index }: Props) {
         getPNG(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
             response.json().then(async data => {
                 const img = await Buffer.from(data).toString("base64");
-                setImage(`data:image/png;base64,${img}`)
+                
+                const imgSource = `data:image/png;base64,${img}`
+                setImage(imgSource);
+                dispatch(addImageFile({
+                    _id: imageID,
+                    source: imgSource
+                }))
+
                 setIsLoading(false);
+                
             })
         })
     }, [])
@@ -38,8 +46,8 @@ export default function Sticker({ imageID, index }: Props) {
     }
 
     return (
-        <div className='relative'>
-            <motion.div className={`grid place-content-center cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
+        <div className='relative grid place-content-center'>
+            <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 2, zIndex: 10 }}
             >

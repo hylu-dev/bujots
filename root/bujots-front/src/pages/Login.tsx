@@ -1,7 +1,7 @@
 import { useState, useEffect, MouseEvent } from 'react'
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import FormInput from '../components/FormInput'
-import Button from '../components/Button'
+import Button from '../components/common/Button'
 import JournalCover from '../components/JournalCover'
 import { get, post } from '../utils'
 import Spinner from '../components/common/Spinner';
@@ -71,7 +71,7 @@ export default function Login() {
                     styles={"bg-cover-dark w-fit px-3 py-2 my-5 rounded"}
                     handler={login_request}
                     type={"submit"}
-                >{isLoading ? <Spinner size={4}></Spinner> : "Login"}</Button>
+                >{isLoading ? <Spinner size={4} ringColor='cover-light' spinColor='cover-dark'></Spinner> : "Login"}</Button>
             </form>
             <Button
                     styles={"text-grey"}

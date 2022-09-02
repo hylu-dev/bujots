@@ -25,7 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pageSchema = exports.jotSchema = exports.stickerSchema = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const image_model_1 = require("./image.model");
 exports.stickerSchema = new mongoose_1.Schema({
     position: [Number, Number],
     image_id: String
@@ -53,10 +52,6 @@ exports.pageSchema = new mongoose_1.Schema({
     },
     jots: {
         type: [exports.jotSchema],
-        default: []
-    },
-    images: {
-        type: [image_model_1.imageSchema],
         default: []
     },
     stickers: {

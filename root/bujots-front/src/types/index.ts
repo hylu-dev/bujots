@@ -5,7 +5,14 @@ export interface IJot {
 
 export interface IImage {
     _id: string,
-    name: string
+    name?: string,
+    source?: string
+}
+
+export interface ISticker {
+    _id?: string
+    position: [number, number],
+    image_id: string
 }
 
 export interface IPage {
@@ -14,8 +21,8 @@ export interface IPage {
     date: string,
     body: string,
     author: string,
-    jots: any[],
-    images: any[]
+    jots: IJot[],
+    stickers: ISticker[]
 }
 
 export const emptyJot: IJot = {
@@ -29,5 +36,5 @@ export const emptyPage: IPage = {
     body: "",
     author: "",
     jots: [],
-    images: []
+    stickers: []
 }

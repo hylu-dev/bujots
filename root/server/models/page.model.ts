@@ -15,7 +15,6 @@ export interface IPage extends Document {
     date: Date,
     author: Schema.Types.ObjectId,
     jots: Types.DocumentArray<IJot>,
-    images: Types.DocumentArray<IImage>
     stickers: Types.DocumentArray<ISticker>
 }
 
@@ -49,10 +48,6 @@ export const pageSchema = new Schema<IPage>({
     jots: {
         type: [jotSchema],
         default: []   
-    },
-    images: {
-        type: [imageSchema],
-        default: []
     },
     stickers: {
         type: [stickerSchema],

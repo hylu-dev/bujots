@@ -5,9 +5,10 @@ import { patch } from '../../../utils';
 
 type Props = {
     pageIndex: number,
+    sameDate?: boolean
 };
 
-export default function TimelineNotch({ pageIndex }: Props) {
+export default function TimelineNotch({ pageIndex, sameDate }: Props) {
     const token = window.localStorage.getItem("access_token") || "";
     const currPage = useSelector(getCurrentIndex);
     const page = useSelector(getCurrentPage)
@@ -28,7 +29,6 @@ export default function TimelineNotch({ pageIndex }: Props) {
             text-xs
             items-center
             basis-0
-            grow-[1]
             select-none
             transition-all
             ease-out-cubic
@@ -38,6 +38,7 @@ export default function TimelineNotch({ pageIndex }: Props) {
             style={{
                 scale: selected() ? 1.2 : 1,
                 fontWeight: selected() ? 'bold' : 'normal',
+                flexGrow: sameDate ? 0.3 : .5
             }}
             onClick={updatePage}
             whileHover={{ scaleX: 1.1, scaleY: 1.1, }}

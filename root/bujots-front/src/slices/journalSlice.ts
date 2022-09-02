@@ -2,17 +2,23 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { emptyPage, IPage, IJot, emptyJot, IImage } from '../types';
 import { RootState } from '../store';
 import * as req from '../utils';
+import pageReducer from './pageReducer';
+import imageReducer from './imageReducer';
 
-interface JournalState {
+export interface JournalState {
     pages: IPage[],
     images: IImage[],
-    status: 'idle' | 'loading' | 'success' | 'fail',
+    imageFiles: any,
+    selectedSticker: string, // id of sticker
+    status: 'idle' | 'loading' | 'success' | 'fail', // for future api thunk rework
     current: number
 }
 
 const initialState: JournalState = {
     pages: [],
     images: [],
+    imageFiles: {},
+    selectedSticker: '',
     status: 'idle',
     current: -1
 }
@@ -23,57 +29,10 @@ export const journalSlice = createSlice({
     name: "journal",
     initialState,
     reducers: {
-        addPage: (state, action: PayloadAction<IPage>) => {
-            state.pages = [...state.pages, action.payload]
-            state.current = state.pages.length - 1;
-        },
-        removePage: (state) => {
-            const newPages = [...state.pages]
-            if (state.current > -1) newPages.splice(state.current, 1);
-            state.pages = newPages;
-            if (state.pages.length === 1) state.current = 0; // iff on page 0 and there's 1 page left
-            else if (state.current === 0) state.pages.length > 1 ? state.current = state.current : state.current = -1; // iff on page 0 and there's > 1 page left
-            else state.pages.length > 1 ? state.current -= 1 : state.current = -1; // iff not on page 0
-        },
-        addJot: (state) => {
-            const newPages = [...state.pages];
-            newPages[state.current]['jots'].push(emptyJot)
-            state.pages = newPages;
-        },
-        switchPage: (state, action: PayloadAction<number>) => {
-            state.current = action.payload;
-        },
-        setTitle: (state, action: PayloadAction<string>) => {
-            const newPages = [...state.pages];
-            newPages[state.current].title = action.payload;
-            state.pages = newPages;
-        },
-        setJots: (state, action: PayloadAction<IJot[]>) => {
-            const newPages = [...state.pages];
-            newPages[state.current].jots = action.payload;
-            console.log(newPages, action.payload);
-            state.pages = newPages;
-        },
-        setPage: (state, action: PayloadAction<IPage>) => {
-            const newPages = [...state.pages];
-            newPages[state.current]['jots'] = action.payload.jots;
-            newPages[state.current]['title'] = action.payload.title;
-            state.pages = newPages;
-        },
-        setPages: (state, action: PayloadAction<IPage[]>) => {
-            state.pages = action.payload;
-            state.current = state.pages.length - 1;
-        },
-        setImages: (state, action: PayloadAction<IImage[]>) => {
-            state.images = action.payload;
-        },
-        addImage: (state, action: PayloadAction<IImage>) => {
-            state.images = [action.payload, ...state.images];
-        },
-        removeImage: (state, action: PayloadAction<number>)  => {
-            const newImages = [...state.images]
-            newImages.splice(action.payload, 1);
-            state.images = newImages;
+        ...pageReducer,
+        ...imageReducer,
+        setSticker: (state, action: PayloadAction<string>) => {
+            state.selectedSticker = action.payload;
         },
     }
 })
@@ -88,11 +47,14 @@ export const { addPage,
     setPages,
     setImages,
     addImage,
-    removeImage
+    removeImage,
+    addImageFile
 } = journalSlice.actions
 
 export const getPages = (state: RootState) => state.journalReducer.pages;
 export const getImages = (state: RootState) => state.journalReducer.images;
+export const getImageFiles = (state: RootState) => state.journalReducer.imageFiles;
+export const getSticker = (state: RootState) => state.journalReducer.selectedSticker;
 export const getCurrentIndex = (state: RootState) => state.journalReducer.current;
 export const getCurrentPage = (state: RootState) => state.journalReducer.current > -1 ? state.journalReducer.pages[state.journalReducer.current] : emptyPage;
 
