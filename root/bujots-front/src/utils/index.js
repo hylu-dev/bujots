@@ -105,6 +105,24 @@ export async function get(url, token = "") {
     });
 }
 
+export async function getPNG(url, token = "") {
+    let headers = {
+        'Accept': 'image/png',
+        'Content-Type': 'image/png'
+    }
+    if (token) headers['Authorization'] = `Bearer ${token}`
+
+    return await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: headers,
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer'
+    });
+}
+
 export async function del(url, token = "") {
     let headers = {
         'Accept': 'application/json',

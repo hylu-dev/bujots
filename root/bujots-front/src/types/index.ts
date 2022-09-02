@@ -3,6 +3,11 @@ export interface IJot {
     text: string
 }
 
+export interface IImage {
+    _id: string,
+    name: string
+}
+
 export interface IPage {
     _id: string,
     title: string,

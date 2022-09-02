@@ -22,17 +22,18 @@ module.exports = {
     },
     gridTemplateColumns: {
       'journal': '200px 354px 200px',
-      'options': 'repeat(4, 1fr)'
+      'options': 'repeat(4, 1fr)',
+      'stickers': 'repeat(2, minmax(0, 1fr))'
     },
     transitionTimingFunction: {
       'out-cubic': 'cubic-bezier(0.075, 0.82, 0.165, 1)'
     },
     dropShadow: {
       'sticker': [
-        '1.5px 1.5px 0 white',
-        '-1.5px 1.5px 0 white',
-        '1.5px -1.5px 0 white',
-        '-1.5px -1.5px 0 white',
+        '1px 1px 0 white',
+        '-1px 1px 0 white',
+        '1px -1px 0 white',
+        '-1px -1px 0 white',
 
         '1px 0px 0 white',
         '-1px 0px 0 white',

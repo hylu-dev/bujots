@@ -4,6 +4,7 @@ import FormInput from '../components/FormInput'
 import Button from '../components/Button'
 import JournalCover from '../components/JournalCover'
 import { get, post } from '../utils'
+import Spinner from '../components/common/Spinner';
 
 export default function Login() {
     const [username, setUsername] = useState("");
@@ -35,6 +36,7 @@ export default function Login() {
         }, token)
         const errorList: String[] = [];
         await request.then(res => {
+            setIsLoading(false);
             if (res.status === 200) {
                 res.json().then(data => {
                     localStorage.setItem('access_token', data.accessToken);
@@ -66,11 +68,10 @@ export default function Login() {
                     onChange={e => setPassword(e.target.value)}
                 />
                 <Button
-                    styles={"bg-cover-dark w-fit px-3 my-5 rounded"}
-                    value={"Login"}
+                    styles={"bg-cover-dark w-fit px-3 py-2 my-5 rounded"}
                     handler={login_request}
                     type={"submit"}
-                ></Button>
+                >{isLoading ? <Spinner size={4}></Spinner> : "Login"}</Button>
             </form>
             <Button
                     styles={"text-grey"}

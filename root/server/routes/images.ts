@@ -12,10 +12,9 @@ const sharp = require('sharp');
 
 router.get('/', verifyToken, async (req: Request, res: Response) => {
     const id = req.user ? req.user._id : null;
-    await Image.find({ author: id }).sort({ "createdAt": -1 }).exec()
-        .then((images: IImage[]) => {
-            const imgArray = images.map((image: IImage) => image._id);
-            res.json(imgArray);
+    await Image.find({ author: id }).sort({ "createdAt": -1 }).select('_id name').exec()
+        .then((images: any) => {
+            res.json(images);
         })
         .catch((err: any) => res.status(400).json(err));
 }).get('/all', async (req: Request, res: Response) => {
@@ -33,9 +32,8 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
         .then((image: IImage) => {
             if (!image) return res.status(404).json({ error: 'Image does not exist' });
             res.contentType('image/png');
-            res.send(image.data);
             const id = req.user ? req.user._id : null;
-            //return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
+            image.author == id ? res.json(image.data) : res.status(401).json({ error: 'User not authorized' })
         })
         .catch((err: Error) => res.status(400).json({ error: err }))
 }).post('/add', [verifyToken, upload.single('image')], async (req: Request, res: Response) => {
@@ -47,6 +45,14 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
         fit: sharp.fit.inside,
     }).trim().png()
 
+    // .extend({
+    //     top: 5,
+    //     bottom: 5,
+    //     left: 5,
+    //     right: 5,
+    //     background: 'black'
+    // })
+
     const buffer = await image.toBuffer();
 
     const newImage = new Image({
@@ -55,7 +61,7 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
         author: user_id
     })
     newImage.save()
-        .then(((result: IImage) => res.json(result._id)))
+        .then(((result: IImage) => res.json({ _id: result._id })))
         .catch((err: Error) => res.status(400).json(err))
 })
 

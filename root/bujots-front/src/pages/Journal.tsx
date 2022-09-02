@@ -12,7 +12,7 @@ import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
 import OptionsPanel from '../components/journal/OptionsPanel'
-import StickerTray from '../components/journal/StickerTray';
+import StickerTray from '../components/journal/stickerTray/StickerTray';
 
 export default function Journal() {
     const navigate: NavigateFunction = useNavigate();

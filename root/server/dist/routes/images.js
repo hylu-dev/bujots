@@ -19,10 +19,9 @@ const fs = require('file-system');
 const sharp = require('sharp');
 router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.user ? req.user._id : null;
-    yield Image.find({ author: id }).sort({ "createdAt": -1 }).exec()
+    yield Image.find({ author: id }).sort({ "createdAt": -1 }).select('_id name').exec()
         .then((images) => {
-        const imgArray = images.map((image) => image._id);
-        res.json(imgArray);
+        res.json(images);
     })
         .catch((err) => res.status(400).json(err));
 })).get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,9 +40,8 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         if (!image)
             return res.status(404).json({ error: 'Image does not exist' });
         res.contentType('image/png');
-        res.send(image.data);
         const id = req.user ? req.user._id : null;
-        //return page.author == id ? res.json(page) : res.status(401).json({ error: 'User not authorized' })
+        image.author == id ? res.json(image.data) : res.status(401).json({ error: 'User not authorized' });
     })
         .catch((err) => res.status(400).json({ error: err }));
 })).post('/add', [authentication_1.verifyToken, upload.single('image')], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -54,6 +52,13 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         height: 300,
         fit: sharp.fit.inside,
     }).trim().png();
+    // .extend({
+    //     top: 5,
+    //     bottom: 5,
+    //     left: 5,
+    //     right: 5,
+    //     background: 'black'
+    // })
     const buffer = yield image.toBuffer();
     const newImage = new Image({
         name: `${Date.now()}_image_${file.originalname}`,
@@ -61,7 +66,7 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         author: user_id
     });
     newImage.save()
-        .then(((result) => res.json(result._id)))
+        .then(((result) => res.json({ _id: result._id })))
         .catch((err) => res.status(400).json(err));
 }));
 module.exports = router;
