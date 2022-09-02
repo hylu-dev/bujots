@@ -15,7 +15,7 @@ const Page = require('../models/page.model');
 const authentication_1 = require("../utils/authentication");
 router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.user ? req.user._id : null;
-    yield Page.find({ author: id }).sort({ "createdAt": 1 }).exec()
+    yield Page.find({ author: id }).sort({ "date": 1 }).exec()
         .then((pages) => res.json(pages))
         .catch((err) => res.status(400).json({ Error: err }));
 })).get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

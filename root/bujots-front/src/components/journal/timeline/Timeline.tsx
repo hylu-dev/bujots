@@ -23,10 +23,10 @@ export default function Timeline() {
     });
   }
 
-  const pageToDateString = (p: IPage) => {
-    const date = new Date(p.date);
-    console.log(date.toDateString())
-    return date.toDateString();
+  const isSameDate = (p: IPage, p2: IPage) => {
+    const date1 = new Date(p.date);
+    const date2 = new Date(p2.date);
+    return date1.toDateString() === date2.toDateString();
   }
 
   return (
@@ -39,7 +39,7 @@ export default function Timeline() {
                 pageIndex={index}
                 key={p._id || index}
                 sameDate={
-                  (pageToDateString(arr[index]) === pageToDateString(arr[index+1] || "") ? true : false)
+                  isSameDate(arr[index], arr[index+1] || '')
                 }
               ></TimelineNotch>
             })

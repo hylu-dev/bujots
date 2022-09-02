@@ -10,7 +10,7 @@ import { verifyToken } from '../utils/authentication'
 
 router.get('/', verifyToken, async (req: Request, res: Response) => {
     const id = req.user ? req.user._id : null;
-    await Page.find({ author: id }).sort({ "createdAt": 1 }).exec()
+    await Page.find({ author: id }).sort({ "date": 1 }).exec()
         .then((pages: any) => res.json(pages))
         .catch((err: any) => res.status(400).json({ Error: err }));
 }).get('/all', async (req: Request, res: Response) => {
