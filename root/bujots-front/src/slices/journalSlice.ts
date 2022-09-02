@@ -34,6 +34,15 @@ export const journalSlice = createSlice({
         setSticker: (state, action: PayloadAction<string>) => {
             state.selectedSticker = action.payload;
         },
+        resetState: (state) => {
+            state.pages = initialState.pages;
+            state.images = initialState.images;
+            state.imageFiles = initialState.imageFiles;
+            state.selectedSticker = initialState.selectedSticker;
+            state.status = initialState.status;
+            state.current = initialState.current;
+
+        }
     }
 })
 
@@ -48,7 +57,9 @@ export const { addPage,
     setImages,
     addImage,
     removeImage,
-    addImageFile
+    addImageFile,
+    setSticker,
+    resetState
 } = journalSlice.actions
 
 export const getPages = (state: RootState) => state.journalReducer.pages;

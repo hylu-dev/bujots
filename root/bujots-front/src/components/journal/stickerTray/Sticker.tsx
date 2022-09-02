@@ -4,7 +4,7 @@ import { Buffer } from "buffer";
 import { motion } from "framer-motion";
 import Spinner from '../../common/Spinner';
 import { useDispatch } from 'react-redux';
-import { addImageFile, removeImage } from '../../../slices/journalSlice';
+import { addImageFile, removeImage, setSticker } from '../../../slices/journalSlice';
 
 type Props = {
     imageID: string
@@ -50,6 +50,7 @@ export default function Sticker({ imageID, index }: Props) {
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 2, zIndex: 10 }}
+                onClick={() => dispatch(setSticker(imageID))}
             >
                 {
                     isLoading ? <Spinner></Spinner> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />

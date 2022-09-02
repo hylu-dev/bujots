@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 import { IPage } from '../types';
 import { useSelector, useDispatch, } from 'react-redux';
-import { getPages, setPages, switchPage } from '../slices/journalSlice'
+import { getPages, resetState, setPages } from '../slices/journalSlice'
 
 import JournalPage from '../components/journal/JournalPage'
 import JournalLayout from '../components/journal/JournalLayout';
@@ -39,7 +39,7 @@ export default function Journal() {
 
     const logout = () => {
         window.localStorage.removeItem("access_token");
-        dispatch(switchPage(-1))
+        dispatch(resetState())
         navigate("/");
     }
 
