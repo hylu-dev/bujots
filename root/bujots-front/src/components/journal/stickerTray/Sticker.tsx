@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { getPNG } from '../../../utils';
+import { del, getPNG } from '../../../utils';
 import { Buffer } from "buffer";
 import { motion } from "framer-motion";
 import Spinner from '../../common/Spinner';
+import { useDispatch } from 'react-redux';
+import { removeImage } from '../../../slices/journalSlice';
 
 type Props = {
     imageID: string
+    index: number
 };
 
-export default function Sticker({ imageID }: Props) {
+export default function Sticker({ imageID, index }: Props) {
     const [image, setImage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const token = window.localStorage.getItem("access_token") || "";
+    const dispatch = useDispatch();
 
     useEffect(() => {
         getPNG(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
@@ -23,14 +27,35 @@ export default function Sticker({ imageID }: Props) {
         })
     }, [])
 
-    return (
-        <motion.div className='grid place-content-center cursor-grab active:cursor-grabbing snap-end'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 2, zIndex: 10 }}
-        >
-            {
-                isLoading ? <Spinner></Spinner> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />
+    const deleteImage = () => {
+        del(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
+            if (response.status === 200) {
+                response.json().then(() => {
+                    dispatch(removeImage(index));
+                })
             }
-        </motion.div>
+        })
+    }
+
+    return (
+        <div className='relative'>
+            <motion.div className={`grid place-content-center cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 2, zIndex: 10 }}
+            >
+                {
+                    isLoading ? <Spinner></Spinner> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />
+                }
+
+            </motion.div>
+            <motion.div className='grid place-content-center select-none text-white text-[.5rem] rounded-full h-3 w-3 bg-paper-dark
+                absolute -top-1.5 -right-1.5'
+                onClick={deleteImage}
+                whileHover={{ scale: 1.3 }}
+                whileTap={{ scale: 1 }}>
+                &#10005;
+            </motion.div>
+        </div>
+
     )
 }

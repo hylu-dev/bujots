@@ -1,18 +1,20 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { emptyPage, IPage, IJot, emptyJot } from '../types';
+import { emptyPage, IPage, IJot, emptyJot, IImage } from '../types';
 import { RootState } from '../store';
 import * as req from '../utils';
 
 interface JournalState {
     pages: IPage[],
+    images: IImage[],
     status: 'idle' | 'loading' | 'success' | 'fail',
-    current: number 
+    current: number
 }
 
 const initialState: JournalState = {
     pages: [],
+    images: [],
     status: 'idle',
-    current: -1 
+    current: -1
 }
 
 // export const retrievePages = createAsyncThunk('pages/getPages', async () => {})
@@ -23,7 +25,7 @@ export const journalSlice = createSlice({
     reducers: {
         addPage: (state, action: PayloadAction<IPage>) => {
             state.pages = [...state.pages, action.payload]
-            state.current = state.pages.length-1;
+            state.current = state.pages.length - 1;
         },
         removePage: (state) => {
             const newPages = [...state.pages]
@@ -32,7 +34,6 @@ export const journalSlice = createSlice({
             if (state.pages.length === 1) state.current = 0; // iff on page 0 and there's 1 page left
             else if (state.current === 0) state.pages.length > 1 ? state.current = state.current : state.current = -1; // iff on page 0 and there's > 1 page left
             else state.pages.length > 1 ? state.current -= 1 : state.current = -1; // iff not on page 0
-            console.log(state.current);
         },
         addJot: (state) => {
             const newPages = [...state.pages];
@@ -53,7 +54,7 @@ export const journalSlice = createSlice({
             console.log(newPages, action.payload);
             state.pages = newPages;
         },
-        setPage: (state, action: PayloadAction<IPage>) => { 
+        setPage: (state, action: PayloadAction<IPage>) => {
             const newPages = [...state.pages];
             newPages[state.current]['jots'] = action.payload.jots;
             newPages[state.current]['title'] = action.payload.title;
@@ -61,14 +62,37 @@ export const journalSlice = createSlice({
         },
         setPages: (state, action: PayloadAction<IPage[]>) => {
             state.pages = action.payload;
-            state.current = state.pages.length-1;
-        }
-
+            state.current = state.pages.length - 1;
+        },
+        setImages: (state, action: PayloadAction<IImage[]>) => {
+            state.images = action.payload;
+        },
+        addImage: (state, action: PayloadAction<IImage>) => {
+            state.images = [action.payload, ...state.images];
+        },
+        removeImage: (state, action: PayloadAction<number>)  => {
+            const newImages = [...state.images]
+            newImages.splice(action.payload, 1);
+            state.images = newImages;
+        },
     }
 })
 
-export const { addPage, removePage, addJot, switchPage, setTitle, setJots, setPage, setPages } = journalSlice.actions
+export const { addPage,
+    removePage,
+    addJot,
+    switchPage,
+    setTitle,
+    setJots,
+    setPage,
+    setPages,
+    setImages,
+    addImage,
+    removeImage
+} = journalSlice.actions
+
 export const getPages = (state: RootState) => state.journalReducer.pages;
+export const getImages = (state: RootState) => state.journalReducer.images;
 export const getCurrentIndex = (state: RootState) => state.journalReducer.current;
 export const getCurrentPage = (state: RootState) => state.journalReducer.current > -1 ? state.journalReducer.pages[state.journalReducer.current] : emptyPage;
 

@@ -18,8 +18,8 @@ const upload = require("../middleware/upload");
 const fs = require('file-system');
 const sharp = require('sharp');
 router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = req.user ? req.user._id : null;
-    yield Image.find({ author: id }).sort({ "createdAt": -1 }).select('_id name').exec()
+    var _a;
+    yield Image.find({ author: (_a = req.user) === null || _a === void 0 ? void 0 : _a._id }).sort({ "createdAt": -1 }).select('_id name').exec()
         .then((images) => {
         res.json(images);
     })
@@ -37,36 +37,41 @@ router.get('/', authentication_1.verifyToken, (req, res) => __awaiter(void 0, vo
         return res.status(400).json({ error: 'Invalid ID format' });
     Image.findById(target)
         .then((image) => {
+        var _a;
         if (!image)
             return res.status(404).json({ error: 'Image does not exist' });
         res.contentType('image/png');
-        const id = req.user ? req.user._id : null;
-        image.author == id ? res.json(image.data) : res.status(401).json({ error: 'User not authorized' });
+        image.author == ((_a = req.user) === null || _a === void 0 ? void 0 : _a._id) ? res.json(image.data) : res.status(401).json({ error: 'User not authorized' });
     })
         .catch((err) => res.status(400).json({ error: err }));
 })).post('/add', [authentication_1.verifyToken, upload.single('image')], (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     const file = req.file;
-    const user_id = req.user ? req.user._id : null;
     const image = yield sharp(file.buffer).resize({
         width: 300,
         height: 300,
         fit: sharp.fit.inside,
     }).trim().png();
-    // .extend({
-    //     top: 5,
-    //     bottom: 5,
-    //     left: 5,
-    //     right: 5,
-    //     background: 'black'
-    // })
     const buffer = yield image.toBuffer();
     const newImage = new Image({
         name: `${Date.now()}_image_${file.originalname}`,
         data: buffer,
-        author: user_id
+        author: (_b = req.user) === null || _b === void 0 ? void 0 : _b._id
     });
     newImage.save()
         .then(((result) => res.json({ _id: result._id })))
         .catch((err) => res.status(400).json(err));
+})).delete('/:imageID', authentication_1.verifyToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const target = req.params.imageID;
+    if (!mongoose_1.Types.ObjectId.isValid(target))
+        return res.status(400).json({ error: 'Invalid ID format' });
+    Image.findByIdAndDelete(target)
+        .then((image) => {
+        var _a;
+        if (!image)
+            return res.status(404).json({ error: 'Image does not exist' });
+        return image.author == ((_a = req.user) === null || _a === void 0 ? void 0 : _a._id) ? res.json(`Image ${target} deleted`) : res.status(401).json({ error: 'User not authorized' });
+    })
+        .catch((err) => res.status(400).json({ error: err }));
 }));
 module.exports = router;

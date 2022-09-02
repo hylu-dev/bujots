@@ -22,13 +22,14 @@ export default function Journal() {
 
     useEffect(() => {
         get(`${process.env.REACT_APP_API_URL}/pages/`, token)
-            .then(response => {;
+            .then(response => {
+                ;
                 if (response.status === 200) {
                     response.json().then((data: IPage[]) => {
                         dispatch(setPages(data));
                     })
                 } else {
-                    response.json().then(data => {
+                    response.json().then(() => {
                         logout();
                     })
                 }
