@@ -36,7 +36,7 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
         <img ref={ref} src={stickerFile}
             onClick={e => selectSticker(e)}
             onTouchStart={e => selectStickerTouch(e)}
-            className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10`}
+            className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10 touch-none`}
             style={{
                 left: sticker.position[0],
                 top: sticker.position[1]
