@@ -6,7 +6,7 @@ import AddStickerButton from './AddStickerButton';
 import Sticker from './Sticker';
 import { Buffer } from "buffer";
 import { useDispatch, useSelector } from 'react-redux';
-import { getImages, setImages } from '../../../slices/journalSlice';
+import { getImages, getSticker, setImages } from '../../../slices/journalSlice';
 
 export default function StickerTray() {
   const images = useSelector(getImages);

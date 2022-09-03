@@ -65,7 +65,6 @@ router.get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         return res.status(400).json({ errors: errors.array() });
     }
     yield User.findOneAndUpdate({ username: target }, user, { new: true }).then((result) => {
-        console.log(result);
         return res.json(result);
     }).catch((err) => res.status(400).json({ error: err }));
 })).get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

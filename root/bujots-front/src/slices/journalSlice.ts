@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { emptyPage, IPage, IJot, emptyJot, IImage } from '../types';
+import { emptyPage, IPage, IJot, emptyJot, IImage, ISticker } from '../types';
 import { RootState } from '../store';
 import * as req from '../utils';
 import pageReducer from './pageReducer';
 import imageReducer from './imageReducer';
+import stickerReducer from './stickerReducer';
 
 export interface JournalState {
     pages: IPage[],
@@ -31,9 +32,7 @@ export const journalSlice = createSlice({
     reducers: {
         ...pageReducer,
         ...imageReducer,
-        setSticker: (state, action: PayloadAction<string>) => {
-            state.selectedSticker = action.payload;
-        },
+        ...stickerReducer,
         resetState: (state) => {
             state.pages = initialState.pages;
             state.images = initialState.images;
@@ -41,7 +40,6 @@ export const journalSlice = createSlice({
             state.selectedSticker = initialState.selectedSticker;
             state.status = initialState.status;
             state.current = initialState.current;
-
         }
     }
 })
@@ -59,6 +57,8 @@ export const { addPage,
     removeImage,
     addImageFile,
     setSticker,
+    addSticker,
+    deleteSticker,
     resetState
 } = journalSlice.actions
 

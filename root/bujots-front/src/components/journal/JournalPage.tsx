@@ -1,11 +1,11 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, ChangeEvent, useRef } from "react";
 import { IPage, IJot, ISticker } from "../../types";
 import Jot from './Jot';
 import { motion } from 'framer-motion';
 import { patch } from '../../utils';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentPage, setPage, addJot, setTitle } from '../../slices/journalSlice'
+import { getCurrentPage, setPage, addJot, setTitle, getSticker, addSticker } from '../../slices/journalSlice'
 import PlacedSticker from "./PlacedSticker";
 
 const SaveState = Object.freeze({
@@ -21,8 +21,13 @@ export default function JournalPage() {
 
     const [saveStatus, setSaveStatus] = useState(SaveState.SAVED);
     const [timer, setTimer] = useState<NodeJS.Timeout | undefined>();
-
     const date = new Date(page.date);
+
+    //sticker
+    const boundRef = useRef<HTMLDivElement>(null);
+    const stickerRef = useRef<HTMLImageElement>(null)
+    const selectedSticker = useSelector(getSticker);
+    const [mousePos, setMousePos] = useState<[number, number]>([0, 0])
 
     useEffect(() => {
         triggerSave();
@@ -30,6 +35,26 @@ export default function JournalPage() {
 
     const updatePage = async () => {
         return patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`, page, token);
+    }
+
+    const updateMousePos = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const stickerCenter = [
+            (stickerRef.current?.getBoundingClientRect().width || 0) / 2,
+            (stickerRef.current?.getBoundingClientRect().height || 0) / 2
+        ]
+        if (boundRef.current instanceof Element) {
+            setMousePos([
+                e.clientX - boundRef.current.getBoundingClientRect().left - stickerCenter[0],
+                e.clientY - boundRef.current.getBoundingClientRect().top - stickerCenter[1]
+            ])
+        }
+    }
+
+    const placeSticker = () => {
+        dispatch(addSticker({
+            image_id: selectedSticker,
+            position: mousePos
+        }))
     }
 
     const triggerSave = async () => {
@@ -54,8 +79,21 @@ export default function JournalPage() {
 
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
-        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5 overflow-hidden'>
-            
+        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5 overflow-hidden'
+            onMouseMove={(e) => updateMousePos(e)}
+            onClick={placeSticker}
+            ref={boundRef}
+        >
+            {
+                selectedSticker && <div className="z-50">
+                    <PlacedSticker ref={stickerRef}
+                        sticker={{
+                            image_id: selectedSticker,
+                            position: mousePos
+                        }}></PlacedSticker>
+                </div>
+            }
+
             {
                 page.stickers.map((sticker: ISticker, index: number) => {
                     return <PlacedSticker key={sticker._id || index} sticker={sticker}></PlacedSticker>

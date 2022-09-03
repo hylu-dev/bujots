@@ -17,7 +17,6 @@ export default function OptionsPanel() {
   }
 
   const delPage = async () => {
-    console.log(page._id, pageIndex, pages.length);
     await del(`${process.env.REACT_APP_API_URL}/pages/${page._id}`,
       token)
       .then(response => {

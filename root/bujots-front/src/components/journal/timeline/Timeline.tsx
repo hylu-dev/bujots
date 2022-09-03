@@ -11,7 +11,6 @@ export default function Timeline() {
   const token = window.localStorage.getItem("access_token") || "";
   const pages = useSelector(getPages);
   const dispatch = useDispatch();
-  //console.log(pages.map(page => page.date));
 
   const newPage = () => {
     post(`${process.env.REACT_APP_API_URL}/pages/add`, emptyPage, token).then(response => {

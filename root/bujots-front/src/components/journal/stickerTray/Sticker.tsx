@@ -3,8 +3,8 @@ import { del, getPNG } from '../../../utils';
 import { Buffer } from "buffer";
 import { motion } from "framer-motion";
 import Spinner from '../../common/Spinner';
-import { useDispatch } from 'react-redux';
-import { addImageFile, removeImage, setSticker } from '../../../slices/journalSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addImageFile, deleteSticker, getSticker, removeImage, setSticker } from '../../../slices/journalSlice';
 
 type Props = {
     imageID: string
@@ -14,6 +14,7 @@ type Props = {
 export default function Sticker({ imageID, index }: Props) {
     const [image, setImage] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const selectedSticker = useSelector(getSticker);
     const token = window.localStorage.getItem("access_token") || "";
     const dispatch = useDispatch();
 
@@ -35,6 +36,13 @@ export default function Sticker({ imageID, index }: Props) {
         })
     }, [])
 
+    const selectSticker = () => {
+        if (selectedSticker === imageID) {
+            dispatch(setSticker(''))
+        } else dispatch(setSticker(imageID))
+
+    }
+
     const deleteImage = () => {
         setIsLoading(true);
         del(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
@@ -46,14 +54,18 @@ export default function Sticker({ imageID, index }: Props) {
                 setIsLoading(false);
             }
         })
-    }   
+        dispatch(deleteSticker(imageID));
+    }
 
     return (
         <div className='relative grid place-content-center'>
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 2, zIndex: 10 }}
-                onClick={() => dispatch(setSticker(imageID))}
+                whileTap={{ scale: 1.5, zIndex: 10 }}
+                onMouseDown={selectSticker}
+                style={{
+                    filter: selectedSticker === imageID ? 'brightness(75%)' : ''
+                }}
             >
                 {
                     isLoading ? <Spinner></Spinner> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />

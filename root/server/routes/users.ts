@@ -69,7 +69,6 @@ router.get('/all', async (req: Request, res: Response) => {
 
             await User.findOneAndUpdate({ username: target }, user, { new: true }).then(
                 (result: IUser) => {
-                    console.log(result);
                     return res.json(result);
                 }
             ).catch((err: Error) => res.status(400).json({ error: err }))
