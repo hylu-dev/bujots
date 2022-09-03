@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
 import journalReducer from './slices/journalSlice'
+import userReducer from './slices/userSlice'
 
 export const store = configureStore({
-    reducer: { journalReducer }
+    reducer: { journalReducer, userReducer }
 })
 
 export default store;

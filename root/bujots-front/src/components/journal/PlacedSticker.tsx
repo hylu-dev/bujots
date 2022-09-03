@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { getImageFiles } from '../../slices/journalSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteSingleSticker, deleteSticker, getImageFiles, setSticker } from '../../slices/journalSlice'
+import { setMousePos } from '../../slices/userSlice'
 import { ISticker } from '../../types'
 
 type Props = {
     sticker: ISticker
+    index?: number
 }
 
-const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker }, ref) => {
+const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, index }, ref) => {
     const imageFiles = useSelector(getImageFiles);
-    let stickerFile = imageFiles[sticker.image_id];
+    const stickerFile = imageFiles[sticker.image_id];
+    const dispatch = useDispatch();
+
+    const selectSticker = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        dispatch(setMousePos([
+            e.clientX,
+            e.clientY
+        ]))
+        dispatch(setSticker(sticker.image_id));
+        if (index !== undefined) dispatch(deleteSingleSticker(index));
+    }
 
     return (
-        <img ref={ref} src={stickerFile} className={`absolute drop-shadow-sticker max-h-[200px] max-w-[200px] z-10`}
+        <img ref={ref} src={stickerFile}
+            onClick={e => selectSticker(e)}
+            className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10`}
             style={{
                 left: sticker.position[0],
                 top: sticker.position[1]

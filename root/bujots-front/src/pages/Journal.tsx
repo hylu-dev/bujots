@@ -74,7 +74,6 @@ export default function Journal() {
             {/* Footer */}
             <motion.div className='col-start-2 col-end-3 row-start-3 row-end-4'
             >
-                <button className='text-sm p-1 mt-1 rounded text-paper-dark hover:underline' onClick={logout}>Close Journal</button>
             </motion.div>
         </JournalLayout>
     </>

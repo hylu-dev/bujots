@@ -22,7 +22,13 @@ const stickerReducer = {
         newPages[state.current].stickers = newStickers;
         state.pages = newPages;
         state.selectedSticker = ''
-    }
+    },
+    deleteSingleSticker: (state: WritableDraft<JournalState>, action: PayloadAction<number>) => {
+        console.log(action.payload);
+        const newPages = [...state.pages];
+        newPages[state.current].stickers.splice(action.payload, 1);
+        state.pages = newPages;
+    },
 }
 
 export default stickerReducer;

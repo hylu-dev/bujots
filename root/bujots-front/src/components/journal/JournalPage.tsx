@@ -1,12 +1,14 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
-import { IPage, IJot, ISticker } from "../../types";
+import { IJot, ISticker } from "../../types";
 import Jot from './Jot';
 import { motion } from 'framer-motion';
 import { patch } from '../../utils';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentPage, setPage, addJot, setTitle, getSticker, addSticker } from '../../slices/journalSlice'
+import { getCurrentPage, setPage, addJot, setTitle, getSticker, addSticker, setSticker } from '../../slices/journalSlice'
 import PlacedSticker from "./PlacedSticker";
+import { getMousePos, setMousePos } from "../../slices/userSlice";
+import Spinner from "../common/Spinner";
 
 const SaveState = Object.freeze({
     UNSAVED: "Unsaved",
@@ -27,7 +29,7 @@ export default function JournalPage() {
     const boundRef = useRef<HTMLDivElement>(null);
     const stickerRef = useRef<HTMLImageElement>(null)
     const selectedSticker = useSelector(getSticker);
-    const [mousePos, setMousePos] = useState<[number, number]>([0, 0])
+    const mousePos = useSelector(getMousePos);
 
     useEffect(() => {
         triggerSave();
@@ -35,26 +37,6 @@ export default function JournalPage() {
 
     const updatePage = async () => {
         return patch(`${process.env.REACT_APP_API_URL}/pages/update/${page._id}`, page, token);
-    }
-
-    const updateMousePos = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const stickerCenter = [
-            (stickerRef.current?.getBoundingClientRect().width || 0) / 2,
-            (stickerRef.current?.getBoundingClientRect().height || 0) / 2
-        ]
-        if (boundRef.current instanceof Element) {
-            setMousePos([
-                e.clientX - boundRef.current.getBoundingClientRect().left - stickerCenter[0],
-                e.clientY - boundRef.current.getBoundingClientRect().top - stickerCenter[1]
-            ])
-        }
-    }
-
-    const placeSticker = () => {
-        dispatch(addSticker({
-            image_id: selectedSticker,
-            position: mousePos
-        }))
     }
 
     const triggerSave = async () => {
@@ -71,16 +53,56 @@ export default function JournalPage() {
 
     const quickSave = async () => {
         clearTimeout(timer);
+        setSaveStatus(SaveState.SAVING);
         dispatch(setPage(page));
         updatePage().then(() => {
             setSaveStatus(SaveState.SAVED);
         })
     }
 
+    const calculateStickerMousePos = () => {
+        let stickerPos: [number, number] = [0, 0];
+        const stickerCenter = [
+            (stickerRef.current?.getBoundingClientRect().width || 0) / 2,
+            (stickerRef.current?.getBoundingClientRect().height || 0) / 2
+        ]
+        if (boundRef.current instanceof Element) {
+            stickerPos = [
+                mousePos[0] - boundRef.current.getBoundingClientRect().left - stickerCenter[0],
+                mousePos[1] - boundRef.current.getBoundingClientRect().top - stickerCenter[1]
+            ]
+        }
+        return stickerPos
+    }
+
+    const isMouseWithinBounds = () => {
+        if (boundRef.current instanceof Element) {
+            const bound = boundRef.current.getBoundingClientRect();
+            return (
+                mousePos[0] > bound.left && mousePos[0] < bound.right &&
+                mousePos[1] > bound.top && mousePos[1] < bound.bottom
+            )
+        }
+        return false;
+    }
+
+    const placeSticker = () => {
+        if (selectedSticker) {
+            if (isMouseWithinBounds()) {
+                dispatch(addSticker({
+                    image_id: selectedSticker,
+                    position: calculateStickerMousePos()
+                }))
+            } else dispatch(setSticker(''));
+        }
+    }
+
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
-        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5 overflow-hidden'
-            onMouseMove={(e) => updateMousePos(e)}
+        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'
+            style={{
+                overflow: selectedSticker ? 'visible' : 'hidden'
+            }}
             onClick={placeSticker}
             ref={boundRef}
         >
@@ -89,14 +111,14 @@ export default function JournalPage() {
                     <PlacedSticker ref={stickerRef}
                         sticker={{
                             image_id: selectedSticker,
-                            position: mousePos
+                            position: calculateStickerMousePos()
                         }}></PlacedSticker>
                 </div>
             }
 
             {
                 page.stickers.map((sticker: ISticker, index: number) => {
-                    return <PlacedSticker key={sticker._id || index} sticker={sticker}></PlacedSticker>
+                    return <PlacedSticker key={sticker._id || index} index={index} sticker={sticker}></PlacedSticker>
                 })
             }
 
@@ -112,14 +134,24 @@ export default function JournalPage() {
                             return <Jot key={j._id || index} index={index} text={j.text} saveHandler={triggerSave}></Jot>
                         })
                     }
-                    <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 1 }}>
-                        <span>+</span>
-                    </motion.li>
+                    {
+                        page.jots.length < 10 && <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 1 }}>
+                            <span>+</span>
+                        </motion.li>
+                    }
+
                 </ol>
             </div>
-            <button className="hover:underline" onClick={quickSave}>{saveStatus}</button>
+
+            <button className="grid place-content-center hover:underline text-paper-dark" onClick={quickSave}>
+                {
+                    saveStatus !== SaveState.SAVED ?
+                        <div className="flex items-center"><Spinner size={3}></Spinner><small className="ml-2">Saving...</small></div>
+                        : <small>{saveStatus}</small>
+                }
+            </button>
         </div>
     </>
 }

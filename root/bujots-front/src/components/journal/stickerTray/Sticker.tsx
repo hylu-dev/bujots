@@ -36,13 +36,6 @@ export default function Sticker({ imageID, index }: Props) {
         })
     }, [])
 
-    const selectSticker = () => {
-        if (selectedSticker === imageID) {
-            dispatch(setSticker(''))
-        } else dispatch(setSticker(imageID))
-
-    }
-
     const deleteImage = () => {
         setIsLoading(true);
         del(`${process.env.REACT_APP_API_URL}/images/${imageID}`, token).then(response => {
@@ -62,7 +55,7 @@ export default function Sticker({ imageID, index }: Props) {
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 1.5, zIndex: 10 }}
-                onMouseDown={selectSticker}
+                onMouseDown={() => dispatch(setSticker(imageID))}
                 style={{
                     filter: selectedSticker === imageID ? 'brightness(75%)' : ''
                 }}

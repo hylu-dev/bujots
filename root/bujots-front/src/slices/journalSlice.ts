@@ -59,6 +59,7 @@ export const { addPage,
     setSticker,
     addSticker,
     deleteSticker,
+    deleteSingleSticker,
     resetState
 } = journalSlice.actions
 
