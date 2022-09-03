@@ -55,7 +55,7 @@ export default function Sticker({ imageID, index }: Props) {
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 1.5, zIndex: 10 }}
-                onMouseDown={() => dispatch(setSticker(imageID))}
+                onClick={() => dispatch(setSticker(imageID))}
                 style={{
                     filter: selectedSticker === imageID ? 'brightness(75%)' : ''
                 }}

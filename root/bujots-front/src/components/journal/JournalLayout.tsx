@@ -11,8 +11,10 @@ export default function JournalLayout({ children }: Props) {
   const dispatch = useDispatch();
 
   return (
-    <motion.div className='h-screen w-screen grid place-content-center'
+    <motion.div className='h-screen w-screen grid sm:place-content-start md:place-content-center'
       onMouseMove={(e) => dispatch(setMousePos([e.clientX, e.clientY]))}
+      onTouchStart={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
+      onTouchMove={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
     >
       <div className="grid grid-cols-journal grid-rows-journal">
         {children}

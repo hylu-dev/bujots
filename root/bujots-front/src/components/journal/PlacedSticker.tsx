@@ -14,7 +14,7 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
     const stickerFile = imageFiles[sticker.image_id];
     const dispatch = useDispatch();
 
-    const selectSticker = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const selectSticker = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
         dispatch(setMousePos([
             e.clientX,
             e.clientY
@@ -23,9 +23,19 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
         if (index !== undefined) dispatch(deleteSingleSticker(index));
     }
 
+    const selectStickerTouch = (e: React.TouchEvent<HTMLImageElement>) => {
+        dispatch(setMousePos([
+            e.touches[0].clientX,
+            e.touches[0].clientY
+        ]))
+        dispatch(setSticker(sticker.image_id));
+        if (index !== undefined) dispatch(deleteSingleSticker(index));
+    }
+
     return (
         <img ref={ref} src={stickerFile}
             onClick={e => selectSticker(e)}
+            onTouchStart={e => selectStickerTouch(e)}
             className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10`}
             style={{
                 left: sticker.position[0],
