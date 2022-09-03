@@ -104,6 +104,7 @@ export default function JournalPage() {
                 overflow: selectedSticker ? 'visible' : 'hidden'
             }}
             onClick={placeSticker}
+            onTouchEnd={placeSticker}
             ref={boundRef}
         >
             {
