@@ -52,8 +52,8 @@ export default function Sticker({ imageID, index }: Props) {
     }
     
     const selectSticker = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        dispatch(setSticker(imageID));
         dispatch(setMousePos([e.clientX, e.clientY]));
+        dispatch(setSticker(imageID));
     }
 
     return (

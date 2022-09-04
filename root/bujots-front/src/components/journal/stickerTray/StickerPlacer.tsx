@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addSticker, getCurrentPage, getImageFiles, getSticker, setSticker } from '../../../slices/journalSlice'
-import { getMousePos } from '../../../slices/userSlice'
-import { ISticker } from '../../../types'
-import PlacedSticker from './PlacedSticker'
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSticker, getCurrentPage, getImageFiles, getSticker, setSticker } from '../../../slices/journalSlice';
+import { getMousePos } from '../../../slices/userSlice';
+import { ISticker } from '../../../types';
+import PlacedSticker from './PlacedSticker';
 
 type Props = {
     boundRef: React.RefObject<HTMLDivElement>
@@ -18,21 +18,21 @@ const StickerPlacer = ({ boundRef }: Props) => {
     const dispatch = useDispatch();
 
     const stickerRef = useRef<HTMLImageElement>(null);
-    const [stickerPos, setStickerPos] = useState<[number, number]>([0, 0])
 
-    useEffect(() => {
+    const calculateStickerPos = () => {
+        let stickerPos: [number, number] = [0,0];
         const stickerCenter = [
             (stickerRef.current?.getBoundingClientRect().width || 150) / 2,
             (stickerRef.current?.getBoundingClientRect().height || 150) / 2
         ]
         if (boundRef.current instanceof Element) {
-            setStickerPos([
+            stickerPos = [
                 mousePos[0] - boundRef.current.getBoundingClientRect().left - stickerCenter[0],
                 mousePos[1] - boundRef.current.getBoundingClientRect().top - stickerCenter[1]
-            ])
+            ]
         }
-
-    }, [mousePos])
+        return stickerPos;
+    }
 
     const isMouseWithinBounds = () => {
         if (boundRef.current instanceof Element) {
@@ -50,22 +50,24 @@ const StickerPlacer = ({ boundRef }: Props) => {
             if (isMouseWithinBounds()) {
                 dispatch(addSticker({
                     image_id: selectedSticker,
-                    position: stickerPos
+                    position: calculateStickerPos()
                 }))
             } else dispatch(setSticker(''));
         }
     }
 
     return <>
-        <img ref={stickerRef} src={stickerFile}
-            className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-50`}
-            onClick={placeSticker}
-            style={{
-                left: stickerPos[0],
-                top: stickerPos[1],
-                display: selectedSticker ? 'initial' : 'none'
-            }}
-        />
+        {
+            selectedSticker && <img ref={stickerRef} src={stickerFile}
+                className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-50`}
+                onClick={placeSticker}
+                style={{
+                    left: calculateStickerPos()[0],
+                    top: calculateStickerPos()[1]
+                }}
+            />
+        }
+
         {
             page.stickers.map((sticker: ISticker, index: number) => {
                 return <PlacedSticker key={sticker._id || index} index={index} sticker={sticker}></PlacedSticker>
