@@ -149,7 +149,7 @@ export default function JournalPage() {
             <button className="grid place-content-center hover:underline text-paper-dark" onClick={quickSave}>
                 {
                     saveStatus !== SaveState.SAVED ?
-                        <div className="flex items-center"><Spinner size={3}></Spinner><small className="ml-2">Saving...</small></div>
+                        <div className="flex items-center"><Spinner size={1}></Spinner><small className="ml-2">Saving...</small></div>
                         : <small>{saveStatus}</small>
                 }
             </button>

@@ -71,7 +71,7 @@ export default function Login() {
                     styles={"bg-cover-dark w-fit px-3 py-2 my-5 rounded"}
                     handler={login_request}
                     type={"submit"}
-                >{isLoading ? <Spinner size={4} ringColor='cover-light' spinColor='cover-dark'></Spinner> : "Login"}</Button>
+                >{isLoading ? <Spinner size={1.5} ringColor='#c29c75' spinColor='#5c4d3b'></Spinner> : "Login"}</Button>
             </form>
             <Button
                     styles={"text-grey"}

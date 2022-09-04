@@ -4,6 +4,7 @@ import FormInput from '../components/FormInput'
 import JournalCover from '../components/JournalCover';
 import Button from '../components/common/Button'
 import { post } from '../utils'
+import Spinner from '../components/common/Spinner';
 
 export default function Register() {
     const [username, setUsername] = useState("");
@@ -23,7 +24,7 @@ export default function Register() {
         }, token)
         const errorList: String[] = [];
         await request.then(res => {
-            
+            setIsLoading(false);
             if (res.status === 200) {
                 res.json().then(data => {
                     navigate("/");
@@ -57,11 +58,10 @@ export default function Register() {
                     onChange={e => setPassword(e.target.value)}
                 />
                 <Button
-                    styles={"bg-cover-dark w-fit px-3 my-5 rounded"}
-                    value={"Create"}
+                    styles={"bg-cover-dark w-fit px-3 py-2 my-5 rounded"}
                     handler={register_request}
                     type={"submit"}
-                ></Button>
+                >{isLoading ? <Spinner size={1.5} ringColor='#c29c75' spinColor='#5c4d3b'></Spinner> : "Create"}</Button>
             </form>
             <Button
                     styles={"text-grey"}
