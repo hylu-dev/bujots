@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { del, getPNG } from '../../../utils';
 import { Buffer } from "buffer";
 import { motion } from "framer-motion";
 import Spinner from '../../common/Spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { addImageFile, deleteSticker, getSticker, removeImage, setSticker } from '../../../slices/journalSlice';
+import { setMousePos } from '../../../slices/userSlice';
 
 type Props = {
     imageID: string
@@ -49,13 +50,18 @@ export default function Sticker({ imageID, index }: Props) {
         })
         dispatch(deleteSticker(imageID));
     }
+    
+    const selectSticker = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        dispatch(setSticker(imageID));
+        dispatch(setMousePos([e.clientX, e.clientY]));
+    }
 
     return (
         <div className='relative grid place-content-center'>
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 1.5, zIndex: 10 }}
-                onClick={() => dispatch(setSticker(imageID))}
+                onClick={e => selectSticker(e)}
                 style={{
                     filter: selectedSticker === imageID ? 'brightness(75%)' : ''
                 }}

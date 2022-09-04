@@ -1,14 +1,14 @@
 import { useState, useEffect, ChangeEvent, useRef } from "react";
-import { IJot, ISticker } from "../../types";
+import { IJot } from "../../types";
 import Jot from './Jot';
 import { motion } from 'framer-motion';
 import { patch } from '../../utils';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentPage, setPage, addJot, setTitle, getSticker, addSticker, setSticker } from '../../slices/journalSlice'
-import PlacedSticker from "./PlacedSticker";
-import { getMousePos, setMousePos } from "../../slices/userSlice";
+import { getMousePos } from "../../slices/userSlice";
 import Spinner from "../common/Spinner";
+import StickerPlacer from "./stickerTray/StickerPlacer";
 
 const SaveState = Object.freeze({
     UNSAVED: "Unsaved",
@@ -60,68 +60,15 @@ export default function JournalPage() {
         })
     }
 
-    const calculateStickerMousePos = () => {
-        let stickerPos: [number, number] = [0, 0];
-        const stickerCenter = [
-            (stickerRef.current?.getBoundingClientRect().width || 0) / 2,
-            (stickerRef.current?.getBoundingClientRect().height || 0) / 2
-        ]
-        if (boundRef.current instanceof Element) {
-            stickerPos = [
-                mousePos[0] - boundRef.current.getBoundingClientRect().left - stickerCenter[0],
-                mousePos[1] - boundRef.current.getBoundingClientRect().top - stickerCenter[1]
-            ]
-        }
-        return stickerPos
-    }
-
-    const isMouseWithinBounds = () => {
-        if (boundRef.current instanceof Element) {
-            const bound = boundRef.current.getBoundingClientRect();
-            return (
-                mousePos[0] > bound.left && mousePos[0] < bound.right &&
-                mousePos[1] > bound.top && mousePos[1] < bound.bottom
-            )
-        }
-        return false;
-    }
-
-    const placeSticker = () => {
-        if (selectedSticker) {
-            if (isMouseWithinBounds()) {
-                dispatch(addSticker({
-                    image_id: selectedSticker,
-                    position: calculateStickerMousePos()
-                }))
-            } else dispatch(setSticker(''));
-        }
-    }
-
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
         <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'
             style={{
                 overflow: selectedSticker ? 'visible' : 'hidden'
             }}
-            onClick={placeSticker}
-            onTouchEnd={placeSticker}
             ref={boundRef}
         >
-            {
-                selectedSticker && <div className="z-50">
-                    <PlacedSticker ref={stickerRef}
-                        sticker={{
-                            image_id: selectedSticker,
-                            position: calculateStickerMousePos()
-                        }}></PlacedSticker>
-                </div>
-            }
-
-            {
-                page.stickers.map((sticker: ISticker, index: number) => {
-                    return <PlacedSticker key={sticker._id || index} index={index} sticker={sticker}></PlacedSticker>
-                })
-            }
+            <StickerPlacer boundRef={boundRef}></StickerPlacer>
 
             <div className="flex justify-between basis-0 grow-[1] border-b-2 border-paper-dark px-1" key={page._id}>
                 <input className="w-[15ch] focus:bg-white bg-paper-light outline-none" type="text" defaultValue={page.title}

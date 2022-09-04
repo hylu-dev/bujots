@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteSingleSticker, deleteSticker, getImageFiles, setSticker } from '../../slices/journalSlice'
-import { setMousePos } from '../../slices/userSlice'
-import { ISticker } from '../../types'
+import { deleteSingleSticker, deleteSticker, getImageFiles, setSticker } from '../../../slices/journalSlice'
+import { setMousePos } from '../../../slices/userSlice'
+import { ISticker } from '../../../types'
 
 type Props = {
     sticker: ISticker
-    index?: number
+    index: number
 }
 
 const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, index }, ref) => {
