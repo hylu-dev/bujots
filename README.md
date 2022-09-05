@@ -8,6 +8,7 @@ The goal of this project is to mimic the joy and satisfaction of writing beautif
 Along with the ability to write daily notes, organized with a timeline. Notes can be freely customized through the use of stickers allowing more personality and charm between each note.
 
 This project is early in development and is subject to frequent changes and data wiping.
+The project is currently hosted on https://bujots.netlify.app/. Feel free to try it out!
 
 
 ## Features
