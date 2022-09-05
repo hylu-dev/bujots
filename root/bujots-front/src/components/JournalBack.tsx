@@ -18,15 +18,23 @@ const JournalBack = ({ children }: Props) => {
                 transition={{ ease: "easeInOut", duration: .5 }}
             >
                 {/* A4 Aspect Ratio 1:1.4142 */}
-                <div className='flex h-full w-full bg-cover-light rounded shadow-md'>
+                <div className='bg-cover-pattern flex h-full w-full rounded shadow-md'
+                    style={{
+                        backgroundColor: '#c29c75'
+                    }}
+                >
                     <div className='basis-0 grow-[5] p-5'>
                         <div className='h-full flex flex-col justify-end items-end'>
-                            <div className="relative rounded bg-cover-label p-5 flex basis-0 max-h-fit max-w-fit flex-col items-center justify-end">
+                            <div className="relative rounded shadow bg-cover-label p-5 flex basis-0 max-h-fit max-w-fit flex-col items-center justify-end">
                                 {children}
                             </div>
                         </div>
                     </div>
-                    <div className='bg-cover-dark basis-0 grow-[1]'></div>
+                    <div className='bg-spine-pattern basis-0 grow-[1]'
+                        style={{
+                            backgroundColor: '#5c4d3b'
+                        }}
+                    ></div>
                 </div>
             </motion.div>
         </JournalLayout>
