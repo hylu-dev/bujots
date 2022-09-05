@@ -29,7 +29,7 @@ export default function AddStickerButton() {
         })
     }
     return (
-        <motion.button className='grid h-[80px] place-content-center border-2 border-paper-dark opacity-75'
+        <motion.button className='grid h-5/6 w-5/6 place-content-center border-2 border-paper-dark opacity-75'
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 1 }}
             onClick={e => clickHandler(e)}

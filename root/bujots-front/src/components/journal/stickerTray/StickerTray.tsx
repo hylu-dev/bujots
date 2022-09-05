@@ -25,7 +25,7 @@ export default function StickerTray() {
   }, [])
 
   return (
-    <motion.div className="h-full w-full grid grid-cols-stickers grid-flow-row place-content-start gap-3 p-2 bg-gray-50 overflow-y-scroll overflow-x-clip"
+    <motion.div className="h-full w-full grid grid-cols-stickers grid-flow-row place-content-start place-items-center gap-3 p-2 bg-gray-50 overflow-y-scroll overflow-x-clip"
       style={{
         scrollbarWidth: 'thin',
         scrollbarColor: '#666 #DDD'
