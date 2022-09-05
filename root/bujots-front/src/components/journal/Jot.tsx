@@ -37,16 +37,14 @@ export default function Jot({ text, index, saveHandler }: Props) {
       <motion.input type="text" defaultValue={text}
         transition={{ ease: [0.075, 0.82, 0.165, 1], duration: .5 }}
         whileHover={{
-          translateY: -2,
           background: 'white',
-          boxShadow: '0px 0px 2px #666'
         }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => updateJot(e.target.value)}
         onBlur={saveHandler}
         className={`w-full
         outline-none
         outline-1
-        focus:outline-paper-dark
+        hover:outline-paper-dark
         bg-transparent`}
       />
       {
