@@ -13,6 +13,9 @@ import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
 import OptionsPanel from '../components/journal/OptionsPanel'
 import StickerTray from '../components/journal/stickerTray/StickerTray';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 export default function Journal() {
     const navigate: NavigateFunction = useNavigate();
@@ -72,8 +75,18 @@ export default function Journal() {
             </motion.div>
 
             {/* Footer */}
-            <motion.div className='col-start-2 col-end-3 row-start-3 row-end-4'
-            >
+            <motion.div className='col-start-2 col-end-3 row-start-3 row-end-4'>
+                <div className='w-full flex items-center p-1 gap-2 justify-between'>
+                    <motion.a className='text-paper-dark w-fit h-fit' initial={{ opacity: .5 }} whileHover={{ scale: 1.1, opacity: 1 }}
+                        target="_blank" href="https://github.com/hylu-dev/bujots">
+                        <FontAwesomeIcon icon={faGithub} />
+                    </motion.a>
+                    <motion.a className='text-paper-dark w-fit h-fit flex justify-center text-xs' initial={{ opacity: .5 }} whileHover={{ scale: 1.1, opacity: 1 }}
+                        target="_blank" href="https://hylu.dev">
+                        <small><FontAwesomeIcon icon={faHeart} /> Hylu</small>
+                    </motion.a>
+                </div>
+
             </motion.div>
         </JournalLayout>
     </>
