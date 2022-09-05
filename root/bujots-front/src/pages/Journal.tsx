@@ -13,9 +13,6 @@ import JournalLayout from '../components/journal/JournalLayout';
 import Timeline from '../components/journal/timeline/Timeline';
 import OptionsPanel from '../components/journal/OptionsPanel'
 import StickerTray from '../components/journal/stickerTray/StickerTray';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
 
 export default function Journal() {
     const navigate: NavigateFunction = useNavigate();
