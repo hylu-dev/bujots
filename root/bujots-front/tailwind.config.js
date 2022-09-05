@@ -13,10 +13,13 @@ module.exports = {
         'cover-label': '#e8dcb3',
         'paper-light': '#fbfbf8',
         'paper-dark': '#555555'
-      }
-    },
-    fontFamily: {
-      'sans': ['Lora', ...defaultTheme.fontFamily.sans],
+      },
+      screens: {
+        '3xl': '1600px'
+      },
+      fontFamily: {
+        'sans': ['Lora', ...defaultTheme.fontFamily.sans],
+      },
     },
     gridTemplateRows: {
       'journal-sm': '1fr 6.25fr 1fr',

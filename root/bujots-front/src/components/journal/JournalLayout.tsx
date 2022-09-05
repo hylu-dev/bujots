@@ -21,7 +21,7 @@ export default function JournalLayout({ children }: Props) {
       grid-cols-journal-sm grid-rows-sm
       lg:grid-cols-journal lg:grid-rows-journal
       xl:grid-cols-journal-xl xl:grid-rows-journal-xl
-      2xl:grid-cols-journal-2xl 2xl:grid-rows-journal-2xl
+      3xl:grid-cols-journal-2xl 3xl:grid-rows-journal-2xl
       ">
         {children}
       </div>
