@@ -57,7 +57,7 @@ export default function Login() {
             <ul className="flex flex-col px-5">
                 {errors.map(item => <li className="text-center list-disc text-xs text-red-800 pb-2">{item}</li>)}
             </ul>
-            <form action="" className='flex items-center flex-col'>
+            <form action="" className='flex w-full items-center flex-col'>
                 <FormInput
                     placeholder='Username'
                     onChange={e => setUsername(e.target.value)}

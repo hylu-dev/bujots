@@ -8,7 +8,6 @@ type Props = {
 
 export default function FormInput({ placeholder, type, onChange }: Props) {
     return <>
-        <div className='flex justify-center'>
             <input type={type || "text"} placeholder={placeholder} maxLength={20} className='
             bg-transparent
             border-0
@@ -17,7 +16,7 @@ export default function FormInput({ placeholder, type, onChange }: Props) {
             opacity-75
             placeholder-gray-800
             text-center
-            w-4/5
+            w-3/4
             outline-none
             box-border
             focus:p-1
@@ -25,6 +24,5 @@ export default function FormInput({ placeholder, type, onChange }: Props) {
             '
                 onChange={onChange}
             />
-        </div>
     </>
 }
