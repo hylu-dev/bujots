@@ -60,7 +60,7 @@ const StickerPlacer = ({ boundRef }: Props) => {
         {
             selectedSticker && <img ref={stickerRef} src={stickerFile}
                 className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-50`}
-                onClick={placeSticker}
+                onMouseUp={placeSticker}
                 style={{
                     left: calculateStickerPos()[0],
                     top: calculateStickerPos()[1]

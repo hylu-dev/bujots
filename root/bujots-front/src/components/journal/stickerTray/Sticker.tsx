@@ -57,21 +57,21 @@ export default function Sticker({ imageID, index }: Props) {
     }
 
     return (
-        <div className='relative grid place-content-center'>
+        <div className='relative grid place-content-center select-none'>
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 1.5, zIndex: 10 }}
-                onClick={e => selectSticker(e)}
+                onMouseDown={e => selectSticker(e)}
                 style={{
                     filter: selectedSticker === imageID ? 'brightness(75%)' : ''
                 }}
             >
                 {
-                    isLoading ? <Spinner/> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />
+                    isLoading ? <Spinner/> : <img draggable="false" className='max-h-[100px] drop-shadow-sticker bg-transparent' src={image} />
                 }
 
             </motion.div>
-            <motion.div className='grid place-content-center select-none text-white text-[.5rem] rounded-full h-3 w-3 bg-paper-dark
+            <motion.div className='grid place-content-center text-white text-[.5rem] rounded-full h-3 w-3 bg-paper-dark
                 absolute -top-1.5 -right-1.5'
                 onClick={deleteImage}
                 whileHover={{ scale: 1.3 }}
