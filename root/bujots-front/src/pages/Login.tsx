@@ -1,6 +1,6 @@
 import { useState, useEffect, MouseEvent } from 'react'
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import FormInput from '../components/FormInput'
+import FormInput from '../components/common/FormInput'
 import Button from '../components/common/Button'
 import JournalCover from '../components/JournalCover'
 import { get, post } from '../utils'
@@ -25,7 +25,7 @@ export default function Login() {
                 }
             })
 
-    }, [token])
+    }, [])
 
     const login_request = async (e: MouseEvent) => {
         e.preventDefault();
@@ -54,8 +54,8 @@ export default function Login() {
     return <>
         {/* A4 Aspect Ratio 1:1.4142 */}
         <JournalCover>
-            <ul className="has-text-danger">
-                {errors.map(item => <li className="list-disc text-sm text-red-700 pb-2">{item}</li>)}
+            <ul className="flex flex-col px-5">
+                {errors.map(item => <li className="text-center list-disc text-xs text-red-800 pb-2">{item}</li>)}
             </ul>
             <form action="" className='flex items-center flex-col'>
                 <FormInput
@@ -68,16 +68,19 @@ export default function Login() {
                     onChange={e => setPassword(e.target.value)}
                 />
                 <Button
-                    styles={"bg-cover-dark w-fit px-3 py-2 my-5 rounded"}
+                    styles={"bg-cover-dark w-16 h-8 w-fit px-3 py-2 my-5 rounded text-cover-light"}
                     handler={login_request}
                     type={"submit"}
-                >{isLoading ? <Spinner size={1.5} ringColor='#c29c75' spinColor='#5c4d3b'></Spinner> : "Login"}</Button>
+                >{isLoading ? <Spinner size={1} ringColor='#c29c75' spinColor='#5c4d3b'></Spinner> : "Login"}</Button>
             </form>
+
             <Button
-                    styles={"text-grey"}
-                    value={"Register"}
-                    handler={() => navigate('/register')}
-            ></Button>
+                styles={"absolute -right-0 -bottom-0 bg-cover-dark text-cover-light rounded p-1"}
+                handler={() => navigate('/register')}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                </svg>
+            </Button>
         </JournalCover>
     </>
 }

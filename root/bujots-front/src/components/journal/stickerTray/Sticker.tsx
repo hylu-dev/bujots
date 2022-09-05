@@ -67,7 +67,7 @@ export default function Sticker({ imageID, index }: Props) {
                 }}
             >
                 {
-                    isLoading ? <Spinner></Spinner> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />
+                    isLoading ? <Spinner/> : <img className='max-h-[100px] drop-shadow-sticker' src={image} />
                 }
 
             </motion.div>

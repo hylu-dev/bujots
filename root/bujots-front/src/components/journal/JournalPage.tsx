@@ -61,7 +61,6 @@ export default function JournalPage() {
     }
 
     return <>
-        {/* A4 Aspect Ratio 1:1.4142 */}
         <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'
             style={{
                 overflow: selectedSticker ? 'visible' : 'hidden'

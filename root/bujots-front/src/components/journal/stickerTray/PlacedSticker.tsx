@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteSingleSticker, deleteSticker, getImageFiles, setSticker } from '../../../slices/journalSlice'
 import { setMousePos } from '../../../slices/userSlice'
 import { ISticker } from '../../../types'
+import Spinner from '../../common/Spinner'
 
 type Props = {
     sticker: ISticker
@@ -20,17 +21,30 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
         if (index !== undefined) dispatch(deleteSingleSticker(index));
     }
 
-    return (
-        <img ref={ref} src={stickerFile}
-            onClick={e => selectSticker(e.clientX, e.clientY)}
-            onTouchStart={e => selectSticker(e.touches[0].clientX, e.touches[0].clientX)}
-            className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10 touch-none`}
-            style={{
-                left: sticker.position[0],
-                top: sticker.position[1]
-            }}
-        />
-    )
+    const showSticker = () => {
+        if (stickerFile) {
+            return <img ref={ref} src={stickerFile}
+                onClick={e => selectSticker(e.clientX, e.clientY)}
+                onTouchStart={e => selectSticker(e.touches[0].clientX, e.touches[0].clientX)}
+                className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10 touch-none`}
+                style={{
+                    left: sticker.position[0],
+                    top: sticker.position[1]
+                }}
+            />
+        }
+        return <div className='absolute h-[100px] w-[100px] grid place-content-center bg-black opacity-20 sticker rounded' style={{
+            left: sticker.position[0],
+            top: sticker.position[1]
+        }}><Spinner></Spinner></div>
+    }
+
+    return <>
+        {
+            showSticker()
+        }
+
+    </>
 })
 
 export default PlacedSticker
