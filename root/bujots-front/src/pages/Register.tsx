@@ -63,14 +63,6 @@ export default function Register() {
                     type={"submit"}
                 >{isLoading ? <Spinner size={1} ringColor='#c29c75' spinColor='#5c4d3b' /> : "Create"}</Button>
             </form>
-            <Button
-                styles={"absolute -left-28 -bottom-0 bg-cover-dark text-cover-light rounded p-1"}
-                handler={() => navigate('/')}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
-                </svg>
-
-            </Button>
         </JournalBack>
     </>
 }
