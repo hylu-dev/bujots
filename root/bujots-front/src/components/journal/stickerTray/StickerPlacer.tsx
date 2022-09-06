@@ -63,7 +63,8 @@ const StickerPlacer = ({ boundRef }: Props) => {
                 onMouseUp={placeSticker}
                 style={{
                     left: calculateStickerPos()[0],
-                    top: calculateStickerPos()[1]
+                    top: calculateStickerPos()[1],
+                    filter: isMouseWithinBounds() ? '' : 'sepia(50%)brightness(80%)saturate(50%)'
                 }}
             />
         }
