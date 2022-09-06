@@ -63,7 +63,10 @@ export default function JournalPage() {
     return <>
         <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'
             style={{
-                overflow: selectedSticker ? 'visible' : 'hidden'
+                overflow: selectedSticker ? 'visible' : 'hidden',
+                overflowY: 'auto',
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#666 #DDD'
             }}
             ref={boundRef}
         >
@@ -82,8 +85,10 @@ export default function JournalPage() {
                         })
                     }
                     {
-                        page.jots.length < 10 && <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark opacity-50 h-8 w-5/6 my-2"
-                            whileHover={{ scale: 1.1 }}
+                        page.jots.length < 15 && <motion.li onClick={() => dispatch(addJot())} className="select-none grid self-center place-content-center box-border border-t-2 border-b-2 border-paper-dark h-8 w-5/6 my-2"
+                            initial={{ opacity: 1 }}
+                            animate={{ opacity: 0, transition: { duration: 1, delay: 2 } }}
+                            whileHover={{ scale: 1.05, opacity: 1 }}
                             whileTap={{ scale: 1 }}>
                             <span>+</span>
                         </motion.li>
