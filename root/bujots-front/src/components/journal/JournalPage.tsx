@@ -80,7 +80,7 @@ export default function JournalPage() {
                 <ol className='flex flex-col h-full whitespace-nowrap gap-2'>
                     {
                         page.jots.map((j: IJot, index: number) => {
-                            return <Jot key={j._id || index} index={index} text={j.text} saveHandler={triggerSave}></Jot>
+                            return <Jot key={j._id || index} index={index} text={j.text} saveHandler={triggerSave} addHandler={() => dispatch(addJot())}></Jot>
                         })
                     }
                     {
