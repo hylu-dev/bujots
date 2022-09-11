@@ -34,7 +34,6 @@ const pageReducer = {
     setJots: (state: WritableDraft<JournalState>, action: PayloadAction<IJot[]>) => {
         const newPages = [...state.pages];
         newPages[state.current].jots = action.payload;
-        console.log(newPages, action.payload);
         state.pages = newPages;
     },
     setPage: (state: WritableDraft<JournalState>, action: PayloadAction<IPage>) => {
