@@ -20,7 +20,7 @@ The project is currently hosted on https://bujots.netlify.app/. Feel free to try
 
 ## Roadmap
 
-- Mutiline jots with full text editor allowing full rich text with multiple fonts
+- Multiline jots with full text editor allowing full rich text with multiple fonts
 - Sticker manipulation (resize, rotate, etc)
 - More paper styles and layouts to choose from
 - Keyword searching through jots
