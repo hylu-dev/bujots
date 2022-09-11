@@ -61,12 +61,11 @@ export default function JournalPage() {
     }
 
     return <>
-        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5'
+        <div className='relative flex h-full w-full flex-col bg-paper-light rounded shadow-md p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200'
             style={{
-                overflow: selectedSticker ? 'visible' : 'hidden',
-                overflowY: 'auto',
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#666 #DDD'
+                overflowX: selectedSticker ? 'visible' : 'hidden',
+                overflowY: selectedSticker ? 'visible' : 'auto',
+//                scrollbarColor: '#666 #DDD'
             }}
             ref={boundRef}
         >

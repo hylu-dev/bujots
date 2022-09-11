@@ -25,11 +25,7 @@ export default function StickerTray() {
   }, [])
 
   return (
-    <motion.div className="h-full w-full grid grid-cols-stickers grid-flow-row place-content-start place-items-center gap-3 p-2 bg-gray-50 overflow-y-scroll overflow-x-clip"
-      style={{
-        scrollbarWidth: 'thin',
-        scrollbarColor: '#666 #DDD'
-      }}>
+    <motion.div className="h-full w-full grid grid-cols-stickers grid-flow-row place-content-start place-items-center gap-3 p-2 pr-5 bg-gray-50 overflow-y-scroll overflow-x-clip scroll-ml-3 scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
       <AddStickerButton></AddStickerButton>
       {
         images.map((image: IImage, index: number) => {
