@@ -12,13 +12,15 @@ export default function JournalLayout({ children }: Props) {
 
   {/* A4 Aspect Ratio 1:1.4142 */ }
   return (
-    <motion.div className='h-screen w-screen grid place-content-start sm:place-content-start lg:justify-center xl:place-content-center p-5'
+    <motion.div className='h-screen w-screen grid p-5'
       onMouseMove={(e) => dispatch(setMousePos([e.clientX, e.clientY]))}
       onTouchStart={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
       onTouchMove={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
     >
-      <div className="grid 
+      <div className="grid m-auto
       grid-cols-journal-xl grid-rows-journal-xl
+      sm:grid-cols-journal sm:grid-rows-journal
+      md:grid-cols-journal md:grid-rows-journal
       lg:grid-cols-journal lg:grid-rows-journal
       xl:grid-cols-journal-xl xl:grid-rows-journal-xl
       3xl:grid-cols-journal-2xl 3xl:grid-rows-journal-2xl
