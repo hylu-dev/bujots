@@ -56,12 +56,18 @@ export default function Sticker({ imageID, index }: Props) {
         dispatch(setSticker(imageID));
     }
 
+    const touchSticker = (e: React.TouchEvent<HTMLDivElement>) => {
+        dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]));
+        dispatch(setSticker(imageID));
+    }
+
     return (
-        <div className='relative grid place-content-center select-none'>
+        <div className='relative grid place-content-center select-none touch-none'>
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 1.5, zIndex: 10 }}
                 onMouseDown={e => selectSticker(e)}
+                onTouchStart={e => touchSticker(e)}
                 style={{
                     filter: selectedSticker === imageID ? 'brightness(75%)' : ''
                 }}

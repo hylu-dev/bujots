@@ -16,7 +16,6 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
     const dispatch = useDispatch();
 
     const selectSticker = (x: number, y: number) => {
-        console.log('test')
         dispatch(setMousePos([x, y]))
         dispatch(setSticker(sticker.image_id));
         if (index !== undefined) dispatch(deleteSingleSticker(index));
@@ -27,7 +26,7 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
             return <img ref={ref} src={stickerFile}
                 draggable='false'
                 onMouseDown={e => selectSticker(e.clientX, e.clientY)}
-                onTouchStart={e => selectSticker(e.touches[0].clientX, e.touches[0].clientX)}
+                onTouchStart={e => selectSticker(e.touches[0].clientX, e.touches[0].clientY)}
                 className={`absolute drop-shadow-sticker max-h-[150px] max-w-[150px] z-10 touch-none select-none`}
                 style={{
                     left: sticker.position[0],
@@ -36,7 +35,7 @@ const PlacedSticker = React.forwardRef<HTMLImageElement, Props>(({ sticker, inde
             />
 
         }
-        return <div className='absolute h-[100px] w-[100px] grid place-content-center bg-black opacity-20 sticker rounded select-none' style={{
+        return <div className='absolute h-[100px] w-[100px] grid place-content-center bg-black opacity-20 sticker rounded select-none touch-none' style={{
             left: sticker.position[0],
             top: sticker.position[1]
         }}><Spinner></Spinner></div>
