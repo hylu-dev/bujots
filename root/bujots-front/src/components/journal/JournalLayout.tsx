@@ -18,7 +18,7 @@ export default function JournalLayout({ children }: Props) {
       onTouchMove={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
     >
       <div className="grid 
-      grid-cols-journal grid-rows-journal
+      grid-cols-journal-xl grid-rows-journal-xl
       lg:grid-cols-journal lg:grid-rows-journal
       xl:grid-cols-journal-xl xl:grid-rows-journal-xl
       3xl:grid-cols-journal-2xl 3xl:grid-rows-journal-2xl
