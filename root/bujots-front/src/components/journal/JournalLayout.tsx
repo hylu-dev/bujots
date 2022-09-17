@@ -17,7 +17,7 @@ export default function JournalLayout({ children }: Props) {
       onTouchStart={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
       onTouchMove={(e) => dispatch(setMousePos([e.touches[0].clientX, e.touches[0].clientY]))}
     >
-      <div className="grid m-auto first-line:grid-cols-journal-xl grid-rows-journal-xl">
+      <div className="grid m-auto grid-cols-journal-xl grid-rows-journal-xl">
         {children}
 
         {/* Footer */}
