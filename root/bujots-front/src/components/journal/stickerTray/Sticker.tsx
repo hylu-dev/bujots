@@ -65,7 +65,6 @@ export default function Sticker({ imageID, index }: Props) {
         <div className='relative grid place-content-center select-none touch-none'>
             <motion.div className={`cursor-grab active:cursor-grabbing ${(index) % 2 ? 'snap-end' : ''}`}
                 whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 1.5, zIndex: 10 }}
                 onMouseDown={e => selectSticker(e)}
                 onTouchStart={e => touchSticker(e)}
                 style={{
