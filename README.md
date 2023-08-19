@@ -29,7 +29,7 @@ A demo can be viewed on https://www.hylu.dev/projects.html#section1.
 
 ---
 
-## Sheridan PGDAP Reviewer Considerations
+## Overview
 
 ### Involvement
 
