@@ -4,7 +4,9 @@
 
 _Bullet journaling slimmed down for the web_
 
-![bujots-demo](https://github.com/hylu-dev/bujots/blob/main/demo.gif)
+![bujots-demo](https://github.com/hylu-dev/bujots/blob/main/demo.png)
+
+[Video Demo](https://www.hylu.dev/images/bujots.mp4)
 
 The goal of this project is to mimic the joy and satisfaction of writing beautiful journal entry and apply that to jot notes.
 
