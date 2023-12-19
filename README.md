@@ -14,8 +14,6 @@ Along with the ability to write daily notes, organized with a timeline. Notes ca
 
 This project is early in development and is subject to frequent changes and data wiping.
 The project is currently hosted on https://bujots.netlify.app/.
-A demo can be viewed on https://www.hylu.dev/projects.html#section1.
-
 
 ## Features
 
