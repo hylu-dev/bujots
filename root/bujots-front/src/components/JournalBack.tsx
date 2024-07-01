@@ -16,7 +16,7 @@ const JournalBack = ({ children }: Props) => {
             <motion.div className="col-start-2 col-end-3 row-start-2 row-end-3"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { ease: [0.075, 0.82, 0.165, 1], duration: 1 } }}
-                exit={{ opacity: 0, rotate: -20, translateX: 100, translateY: 100 }}
+                exit={{ opacity: 0, rotate: -5, translateX: 40, translateY: 40 }}
                 transition={{ ease: "easeInOut", duration: .5 }}
             >
                 {/* A4 Aspect Ratio 1:1.4142 */}

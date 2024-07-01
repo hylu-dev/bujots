@@ -32,6 +32,43 @@ Please reach out if your interested in using the live app.
 
 ---
 
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`).
+
+### Frontend
+
+Create a .env file and declare your server url. Ensure it's directed towards `/api`.
+
+```bash
+REACT_APP_API_URL=http://localhost:5000/api
+```
+
+Start a development server:
+
+```bash
+npm start
+```
+
+### Server
+
+Create a .env file and declare your database URI and Secret Key
+
+> You can generate a key using node builtins `require('crypto').randomBytes(64).toString('hex')`
+
+```bash
+ATLAS_URI=<mongodb-connection-string>
+ACCESS_TOKEN_SECRET=<secret-key>
+```
+
+Start a development server:
+
+```bash
+npm start
+```
+
+---
+
 ## Overview
 
 ### Involvement
